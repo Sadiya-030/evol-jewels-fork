@@ -151,27 +151,27 @@ function PageContent() {
                   viewBox="0 0 39 39"
                   fill="none"
                 >
-                  <g clip-path="url(#clip0_2911_7791)">
+                  <g clipPath="url(#clip0_2911_7791)">
                     <path
                       d="M30.4688 7.3125H8.53125C7.85815 7.3125 7.3125 7.85815 7.3125 8.53125V30.4688C7.3125 31.1418 7.85815 31.6875 8.53125 31.6875H30.4688C31.1418 31.6875 31.6875 31.1418 31.6875 30.4688V8.53125C31.6875 7.85815 31.1418 7.3125 30.4688 7.3125Z"
                       stroke="black"
-                      stroke-width="2.4375"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="2.4375"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                     <path
                       d="M19.5 7.3125V31.6875"
                       stroke="black"
-                      stroke-width="2.4375"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="2.4375"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                     <path
                       d="M7.3125 19.5H31.6875"
                       stroke="black"
-                      stroke-width="2.4375"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="2.4375"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                   </g>
                   <defs>

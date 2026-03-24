@@ -116,11 +116,18 @@ const CharmsCodePage = ({ link }) => {
       if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') return;
       setIsKeyboardOpen(false);
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchstart", handleClickOutside);
+
+    // Add event listeners with proper options for production touch devices
+    const eventOptions = { passive: false, capture: true };
+
+    document.addEventListener("mousedown", handleClickOutside, eventOptions);
+    document.addEventListener("touchstart", handleClickOutside, eventOptions);
+    document.addEventListener("pointerdown", handleClickOutside, eventOptions);
+
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside, eventOptions);
+      document.removeEventListener("touchstart", handleClickOutside, eventOptions);
+      document.removeEventListener("pointerdown", handleClickOutside, eventOptions);
     };
   }, [isKeyboardOpen]);
 
