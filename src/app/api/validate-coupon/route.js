@@ -9,7 +9,7 @@ export async function POST(req) {
   const apiUrl = isSpinPage
     ? `${process.env.CMSURL}api/spin-coupons?filters[code][$eq]=${code}`
     : `${process.env.CMSURL}api/coupons?filters[code][$eq]=${code}`;
-  console.log('API URL:', apiUrl);
+  console.log("API URL:", apiUrl);
   try {
     res = await fetch(apiUrl, {
       cache: "no-store",
@@ -18,7 +18,7 @@ export async function POST(req) {
     console.error("Strapi fetch failed:", error);
     return Response.json(
       { success: false, message: "Service unavailable" },
-      { status: 503 }
+      { status: 503 },
     );
   }
 
@@ -29,14 +29,14 @@ export async function POST(req) {
   if (!coupon || !coupon.isValidCoupon) {
     return Response.json(
       { success: false, message: "Invalid coupon" },
-      { status: 403 }
+      { status: 403 },
     );
   }
   if (isSpinPage) {
     if (Number(coupon.gold) === 1) {
       return Response.json(
         { success: false, message: "Invalid coupon" },
-        { status: 403 }
+        { status: 403 },
       );
     }
   }
