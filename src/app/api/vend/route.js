@@ -11,14 +11,14 @@ export async function POST(req) {
     if (!session || session.state !== "CODE_VERIFIED") {
       return Response.json(
         { success: false, error: "Invalid vend attempt" },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
     if (spinFail) {
       const apiURL = spinFlow
-        ? `${process.env.CMSURL}api/spin-coupons/${session.couponID}`
-        : `${process.env.CMSURL}api/coupons/${session.couponID}`;
+        ? `${process.env.CMSURL}/api/spin-coupons/${session.couponID}`
+        : `${process.env.CMSURL}/api/coupons/${session.couponID}`;
 
       const charmsValidRes = await fetch(apiURL, {
         method: "PUT",
@@ -49,14 +49,14 @@ export async function POST(req) {
     } else {
       // 1️⃣ Fetch slot data from CMS
       const fetchSlotRes = await fetch(
-        `${process.env.CMSURL}api/charms?filters[title][$eq]=${name}&filters[grams][$eq]=${weight}`
+        `${process.env.CMSURL}api/charms?filters[title][$eq]=${name}&filters[grams][$eq]=${weight}`,
       );
 
       // ❌ If CMS API fails
       if (!fetchSlotRes.ok) {
         return NextResponse.json(
           { success: false, message: "Service unavailable" },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -67,13 +67,13 @@ export async function POST(req) {
       if (charmsList.length === 0) {
         return NextResponse.json(
           { success: false, message: "Charms not found" },
-          { status: 404 }
+          { status: 404 },
         );
       }
 
       // ✅ Find first charm with inventory > 0
       const availableCharm = charmsList.find(
-        (item) => Number(item.inventory) > 0
+        (item) => Number(item.inventory) > 0,
       );
 
       // ❌ All inventories are 0
@@ -84,7 +84,7 @@ export async function POST(req) {
             charmsNotfound: true,
             error: `${name} (${weight}g) is not available`,
           },
-          { status: 404 }
+          { status: 404 },
         );
       }
 
@@ -129,7 +129,9 @@ export async function POST(req) {
       // Call vending machine (ESP32 or Simulator)
       const vendingUrl = process.env.VENDING_URL || "http://localhost:8080";
       try {
-        console.log(`[VEND] Calling vending machine at ${vendingUrl}/vend with slot ${slotNo}`);
+        console.log(
+          `[VEND] Calling vending machine at ${vendingUrl}/vend with slot ${slotNo}`,
+        );
         const vendResponse = await fetch(`${vendingUrl}/vend`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -142,7 +144,10 @@ export async function POST(req) {
           console.error("[VEND] Vending machine error:", vendResult);
         }
       } catch (vendError) {
-        console.error("[VEND] Failed to call vending machine:", vendError.message);
+        console.error(
+          "[VEND] Failed to call vending machine:",
+          vendError.message,
+        );
         // Don't fail the request if vending machine is unreachable - just log it
       }
 
@@ -157,7 +162,7 @@ export async function POST(req) {
 
     return NextResponse.json(
       { success: false, message: error?.message || "Vending Failed" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
