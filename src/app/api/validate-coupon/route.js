@@ -7,8 +7,8 @@ export async function POST(req) {
   // 🔹 Fetch from Strapi
   let res;
   const apiUrl = isSpinPage
-    ? `${process.env.CMSURL}api/spin-coupons?filters[code][$eq]=${code}`
-    : `${process.env.CMSURL}api/coupons?filters[code][$eq]=${code}`;
+    ? `${process.env.CMSURL}/api/spin-coupons?filters[code][$eq]=${code}`
+    : `${process.env.CMSURL}/api/coupons?filters[code][$eq]=${code}`;
   console.log("API URL:", apiUrl);
   try {
     res = await fetch(apiUrl, {

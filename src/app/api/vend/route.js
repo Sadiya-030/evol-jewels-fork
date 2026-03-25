@@ -49,7 +49,7 @@ export async function POST(req) {
     } else {
       // 1️⃣ Fetch slot data from CMS
       const fetchSlotRes = await fetch(
-        `${process.env.CMSURL}api/charms?filters[title][$eq]=${name}&filters[grams][$eq]=${weight}`,
+        `${process.env.CMSURL}/api/charms?filters[title][$eq]=${name}&filters[grams][$eq]=${weight}`,
       );
 
       // ❌ If CMS API fails
@@ -90,7 +90,7 @@ export async function POST(req) {
 
       const slotNo = availableCharm.slotNo;
       const charmId = availableCharm.documentId;
-      await fetch(`${process.env.CMSURL}api/charms/${charmId}`, {
+      await fetch(`${process.env.CMSURL}/api/charms/${charmId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -103,8 +103,8 @@ export async function POST(req) {
       });
 
       const apiURL = spinFlow
-        ? `${process.env.CMSURL}api/spin-coupons/${session.couponID}`
-        : `${process.env.CMSURL}api/coupons/${session.couponID}`;
+        ? `${process.env.CMSURL}/api/spin-coupons/${session.couponID}`
+        : `${process.env.CMSURL}/api/coupons/${session.couponID}`;
 
       const charmsValidRes = await fetch(apiURL, {
         method: "PUT",
