@@ -75,6 +75,10 @@ const SpinPage = ({ charmsssr, Probability }) => {
     { id: 8, emoji: "", label: "", isWin: false, probability: 0.05 },
   ];
 
+  // Track if this is phone-based flow
+  const [isPhoneFlow, setIsPhoneFlow] = useState(false);
+  const [spinPhoneNumber, setSpinPhoneNumber] = useState("");
+
   // Wait for store hydration before checking session
   useEffect(() => {
     setIsHydrated(true);
@@ -84,7 +88,15 @@ const SpinPage = ({ charmsssr, Probability }) => {
   useEffect(() => {
     if (!isHydrated) return;
 
-    // Check both store and sessionStorage for valid session
+    // Check for phone-based flow first
+    const phoneNumber = sessionStorage.getItem("spinPhoneNumber");
+    if (phoneNumber) {
+      setIsPhoneFlow(true);
+      setSpinPhoneNumber(phoneNumber);
+      return;
+    }
+
+    // Check both store and sessionStorage for valid session (legacy coupon flow)
     const hasSession = sessionStorage.getItem("charmSessionId");
     const hasCharmsSize = charmsSize !== null && charmsSize !== "";
 
@@ -109,9 +121,47 @@ const SpinPage = ({ charmsssr, Probability }) => {
   };
   const [issuccessspin, setisSucesssSpin] = useState(false);
 
+  // Decrement spin for phone-based flow
+  const decrementUserSpin = async () => {
+    try {
+      const res = await fetch("/api/user-spin/spin", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phoneNumber: spinPhoneNumber }),
+      });
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      console.error("Error decrementing spin:", error);
+      return { success: false, error: error.message };
+    }
+  };
+
   const handelSelectCharm = async (spinresult) => {
-    const sesId = sessionStorage.getItem("charmSessionId");
     if (!spinresult) return;
+
+    // Handle phone-based flow
+    if (isPhoneFlow) {
+      // Decrement spin count
+      const decrementResult = await decrementUserSpin();
+      if (decrementResult?.success === false) {
+        setnotifymsg(decrementResult?.message || decrementResult?.error || "Failed to record spin");
+        setnotifimodal(true);
+        return;
+      }
+
+      // Show result modal
+      setisSucesssSpin(spinresult?.isWin === true);
+      setsucessModal(true);
+
+      // Clear session data
+      sessionStorage.removeItem("spinPhoneNumber");
+      sessionStorage.removeItem("spinUserName");
+      return;
+    }
+
+    // Legacy coupon-based flow
+    const sesId = sessionStorage.getItem("charmSessionId");
     if (spinresult?.isWin === false) {
       const data2 = await markSpinCouponAsUsed(sesId);
       if (data2?.success === false) {

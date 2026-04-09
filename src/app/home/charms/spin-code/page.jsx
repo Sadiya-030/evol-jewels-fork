@@ -1,12 +1,8 @@
-import CharmsCodePage from "../../../../components/charms/CharmsCodePage";
-import React from "react";
+import { redirect } from "next/navigation";
 
 const page = () => {
-  return (
-    <div className="min-h-screen overflow-hidden">
-      <CharmsCodePage link="/home/charms/spin-code/spin" />
-    </div>
-  );
+  // Redirect to phone login flow for spin eligibility
+  redirect("/home/charms/spin-code/login");
 };
 
 export default page;
