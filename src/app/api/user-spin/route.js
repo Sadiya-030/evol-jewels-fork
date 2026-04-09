@@ -38,18 +38,14 @@ export async function GET(req) {
     console.log(`[API] GET /api/user-spin - phoneNumber: ${phoneNumber}`);
 
     // Validate phone number
-    if (!phoneNumber) {
-      return NextResponse.json(
-        { success: false, message: "Phone number is required" },
-        { status: 400 }
-      );
-    }
-
     const validation = validatePhoneNumber(phoneNumber);
-    if (!validation.valid) {
+    if (!phoneNumber || !validation.valid) {
       return NextResponse.json(
-        { success: false, message: validation.error },
-        { status: 400 }
+        {
+          success: false,
+          message: validation.error || "Phone number is required",
+        },
+        { status: 400 },
       );
     }
 
@@ -59,17 +55,13 @@ export async function GET(req) {
     if (!result.success) {
       return NextResponse.json(
         { success: false, message: result.error },
-        { status: result.status || 500 }
+        { status: result.status || 500 },
       );
     }
 
     return NextResponse.json({
       success: true,
-      data: {
-        name: result.data.name,
-        phoneNumber: result.data.phoneNumber,
-        spinAvailable: result.data.spinAvailable,
-      },
+      data: result.data,
     });
   } catch (error) {
     console.error("[API] GET /api/user-spin error:", error);
@@ -78,7 +70,7 @@ export async function GET(req) {
         success: false,
         message: "Sorry, service unavailable. We are trying to get it back up!",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -93,30 +85,26 @@ export async function POST(req) {
     const { name, phoneNumber } = body;
 
     console.log(
-      `[API] POST /api/user-spin - name: ${name}, phoneNumber: ${phoneNumber}`
+      `[API] POST /api/user-spin - name: ${name}, phoneNumber: ${phoneNumber}`,
     );
 
     // Validate required fields
     if (!name || !name.trim()) {
       return NextResponse.json(
         { success: false, message: "Name is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    if (!phoneNumber) {
-      return NextResponse.json(
-        { success: false, message: "Phone number is required" },
-        { status: 400 }
-      );
-    }
-
-    // Validate phone number format
+    // Validate phone number
     const validation = validatePhoneNumber(phoneNumber);
-    if (!validation.valid) {
+    if (!phoneNumber || !validation.valid) {
       return NextResponse.json(
-        { success: false, message: validation.error },
-        { status: 400 }
+        {
+          success: false,
+          message: validation.error || "Phone number is required",
+        },
+        { status: 400 },
       );
     }
 
@@ -126,18 +114,14 @@ export async function POST(req) {
     if (!result.success) {
       return NextResponse.json(
         { success: false, message: result.error },
-        { status: result.status || 500 }
+        { status: result.status || 500 },
       );
     }
 
     return NextResponse.json({
       success: true,
       message: "User created successfully",
-      data: {
-        name: result.data.name,
-        phoneNumber: result.data.phoneNumber,
-        spinAvailable: result.data.spinAvailable,
-      },
+      data: result.data,
     });
   } catch (error) {
     console.error("[API] POST /api/user-spin error:", error);
@@ -146,7 +130,7 @@ export async function POST(req) {
         success: false,
         message: "Sorry, service unavailable. We are trying to get it back up!",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

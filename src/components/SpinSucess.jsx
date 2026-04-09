@@ -60,23 +60,25 @@ const SpinSucess = ({ isOpen, setIsOpen, isSucess }) => {
               <div className=" w-full px-[67px]">
                 <div className=" bg-white h-[191px] overflow-hidden  mb-[55px] mx-auto w-[191px]">
                   <img
-                    src="https://images.unsplash.com/photo-1590736969955-71cc94901144?w=400&q=80"
+                    src="/fail.jpg"
                     alt="Try again"
                     className=" w-auto mx-auto h-[191px] object-cover rounded-full"
                   />
                 </div>
-                <p className=" text-black text-center text-[58px] leading-[68px]">
-                  Not This Time…
+                <p className="text-black text-center text-[58px] leading-[68px]">
+                  Better Luck Next Time!
                 </p>
-                <p className=" text-[30px] mt-[24px] mb-[55px] text-black leading-[54px]">
-                  Don’t worry — you’ve still got ways to get your charm today!
+
+                <p className="text-black text-center text-[30px] mt-[24px] mb-[55px] leading-[54px]">
+                  Your Spin has been used for this Number.
                 </p>
+
                 <Link
-                  href="/home/charms/spin-code"
+                  href="/home/charms/charms-code"
                   onClick={() => setIsOpen(false)}
-                  className=" text-white text-[30px] leading-[54px]  rounded-[200px] h-[100px] flex items-center justify-center w-full bg-[#002066]"
+                  className="text-white text-[30px] leading-[54px] rounded-[200px] h-[100px] flex items-center justify-center w-full bg-[#002066]"
                 >
-                  Try Again Tomorrow
+                  Continue with Charms Code
                 </Link>
               </div>
             )}

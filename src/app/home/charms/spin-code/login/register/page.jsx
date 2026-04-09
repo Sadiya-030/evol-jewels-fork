@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
+import CapsLockIcon from "../../../../../../components/icons/CapsLockIcon";
 import charms1 from "../../../../../../../public/charmsicons1.png";
 import charms2 from "../../../../../../../public/charmsicons2.png";
 import charms3 from "../../../../../../../public/charmsicons3.png";
@@ -15,20 +16,7 @@ const KeyboardKey = ({ label, onClick, className = "" }) => (
     onClick={onClick}
     className={`min-w-[75px] px-2 h-[79px] rounded-[8px] text-black text-[40px] font-semibold bg-[#fff] backdrop-blur-sm hover:bg-[#FFFFFF25] transition-all ${className}`}
   >
-    {label === "Caps" && (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="34"
-        height="30"
-        viewBox="0 0 34 30"
-        fill="none"
-      >
-        <path
-          d="M9.17379 18.3827H0.894161C0.105791 18.3827 -0.295367 17.434 0.253529 16.8672L16.3251 0.271519C16.6757 -0.0905063 17.256 -0.0905063 17.6066 0.271519L33.6782 16.8672C34.2271 17.434 33.8259 18.3827 33.0376 18.3827H24.7568V28.2163C24.7568 28.7097 24.3572 29.1098 23.8643 29.1098H10.0663C9.57342 29.1098 9.17379 28.7097 9.17379 28.2163V18.3827Z"
-          fill="black"
-        />
-      </svg>
-    )}
+    {label === "Caps" && <CapsLockIcon />}
     {label === "Back" && "Back"}
     {label === "Space" && "Space"}
     {!["Caps", "Back", "Space"].includes(label) && label}
@@ -37,6 +25,7 @@ const KeyboardKey = ({ label, onClick, className = "" }) => (
 
 const Page = () => {
   const router = useRouter();
+  const inputRef = useRef(null);
   const [name, setName] = useState("");
   const [isCaps, setIsCaps] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -50,7 +39,7 @@ const Page = () => {
 
   // Get phone number from session storage
   useEffect(() => {
-    const storedPhone = sessionStorage.getItem("spinPhoneNumber");
+    const storedPhone = sessionStorage.getItem("userPhoneNumber");
     if (!storedPhone) {
       router.push("/home/charms/spin-code/login");
       return;
@@ -58,7 +47,8 @@ const Page = () => {
     setPhoneNumber(storedPhone);
   }, [router]);
 
-  // Auto change charms every 2 seconds
+  // Decorative animation: cycles through charm images in the circular icon
+  // display at the top of the page to create visual interest while user enters name
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % charms.length);
@@ -72,7 +62,7 @@ const Page = () => {
       if (!isKeyboardOpen) return;
       const target = event.target;
       if (target.closest('[data-keyboard="true"]')) return;
-      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return;
+      if (target.closest('[data-name-input="true"]')) return;
       setIsKeyboardOpen(false);
     };
 
@@ -82,11 +72,30 @@ const Page = () => {
     document.addEventListener("pointerdown", handleClickOutside, eventOptions);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside, eventOptions);
-      document.removeEventListener("touchstart", handleClickOutside, eventOptions);
-      document.removeEventListener("pointerdown", handleClickOutside, eventOptions);
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside,
+        eventOptions,
+      );
+      document.removeEventListener(
+        "touchstart",
+        handleClickOutside,
+        eventOptions,
+      );
+      document.removeEventListener(
+        "pointerdown",
+        handleClickOutside,
+        eventOptions,
+      );
     };
   }, [isKeyboardOpen]);
+
+  // Handle physical keyboard input
+  const handleNameChange = (e) => {
+    const value = e.target.value;
+    setName(value);
+    setError("");
+  };
 
   const handleKeyPress = (key) => {
     if (key === "Back") {
@@ -162,7 +171,7 @@ const Page = () => {
       throttle(() => {
         createUserRef.current();
       }, 2000),
-    []
+    [],
   );
 
   const rows = [
@@ -174,17 +183,6 @@ const Page = () => {
 
   return (
     <div className="relative w-full h-screen">
-      {/* Service Error Modal */}
-      {showServiceError && (
-        <ServiceError
-          onRetry={() => {
-            setShowServiceError(false);
-            createUser();
-          }}
-          homeLink="/home/charms"
-        />
-      )}
-
       {/* Background video */}
       <div className="w-full h-screen absolute top-0 left-0 z-0">
         <video
@@ -197,21 +195,32 @@ const Page = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
       </div>
 
+      {/* Service Error Modal */}
+      {showServiceError && (
+        <ServiceError
+          onRetry={() => {
+            setShowServiceError(false);
+            createUser();
+          }}
+          homeLink="/home/charms"
+        />
+      )}
+
       {/* Foreground content */}
       <div className="relative z-50 flex flex-col justify-between h-full">
         {/* Header */}
         <div className="h-[103px] flex-shrink-0 bg-gray-100/10 flex justify-between items-center px-[50px] w-full">
           <Link
             href="/home/charms/spin-code/login"
-            className="flex text-white items-center gap-4 text-[24px]"
+            className="flex text-black items-center gap-4 text-[24px]"
           >
-            <ArrowLeft size={32} className="text-white" />
+            <ArrowLeft size={32} className="text-black" />
             Back
           </Link>
-          <p className="text-white text-[30px]">Charms</p>
+          <p className="text-black text-[30px]">Charms</p>
           <Link
             href="/home"
-            className="rounded-md border-[2.207px] text-xl text-white border-[#FFFFFF66] px-3 py-2 grid place-content-center"
+            className="rounded-md border-[2.207px] text-xl text-black border-black px-3 py-2 grid place-content-center"
           >
             Home
           </Link>
@@ -254,16 +263,24 @@ const Page = () => {
                 Your Name
               </label>
               <div
-                onClick={() => setIsKeyboardOpen(true)}
-                className={`px-[45px] rounded-[12px] overflow-hidden bg-[#FFFFFF29] h-[108px] w-full border-2 flex gap-2 items-center cursor-pointer ${
+                data-name-input="true"
+                onClick={() => {
+                  setIsKeyboardOpen(true);
+                  inputRef.current?.focus();
+                }}
+                className={`px-[45px] rounded-[12px] overflow-hidden bg-[#FFFFFF29] h-[108px] w-full border-2 flex gap-2 items-center cursor-text ${
                   error ? "border-red-500" : "border-[#EDD9D942]"
                 }`}
               >
-                <p className="text-4xl text-white">
-                  {name || (
-                    <span className="text-white/60">Enter your name</span>
-                  )}
-                </p>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={name}
+                  onChange={handleNameChange}
+                  onFocus={() => setIsKeyboardOpen(true)}
+                  placeholder="Enter your name"
+                  className="text-4xl h-full bg-transparent outline-none w-full text-white placeholder-white/60"
+                />
               </div>
               {error && (
                 <p className="text-red-400 text-[20px] mt-3">{error}</p>
@@ -296,8 +313,8 @@ const Page = () => {
                         key === "Caps" || key === "Back" || key === "Space"
                           ? key
                           : isCaps
-                          ? key.toUpperCase()
-                          : key.toLowerCase()
+                            ? key.toUpperCase()
+                            : key.toLowerCase()
                       }
                       onClick={() => handleKeyPress(key)}
                       className={
@@ -306,10 +323,10 @@ const Page = () => {
                             ? "mr-10 px-5"
                             : "bg-[#FFFFFF25] mr-10 px-5"
                           : key === "Back"
-                          ? "ml-10 px-5 hover:bg-red-300/80 text-[24px]"
-                          : key === "Space"
-                          ? "min-w-[400px]"
-                          : ""
+                            ? "ml-10 px-5 hover:bg-red-300/80 text-[24px]"
+                            : key === "Space"
+                              ? "min-w-[400px]"
+                              : ""
                       }
                     />
                   ))}

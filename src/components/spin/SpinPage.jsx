@@ -77,7 +77,7 @@ const SpinPage = ({ charmsssr, Probability }) => {
 
   // Track if this is phone-based flow
   const [isPhoneFlow, setIsPhoneFlow] = useState(false);
-  const [spinPhoneNumber, setSpinPhoneNumber] = useState("");
+  const [userPhoneNumber, setUserPhoneNumber] = useState("");
 
   // Wait for store hydration before checking session
   useEffect(() => {
@@ -89,10 +89,10 @@ const SpinPage = ({ charmsssr, Probability }) => {
     if (!isHydrated) return;
 
     // Check for phone-based flow first
-    const phoneNumber = sessionStorage.getItem("spinPhoneNumber");
+    const phoneNumber = sessionStorage.getItem("userPhoneNumber");
     if (phoneNumber) {
       setIsPhoneFlow(true);
-      setSpinPhoneNumber(phoneNumber);
+      setUserPhoneNumber(phoneNumber);
       return;
     }
 
@@ -127,7 +127,7 @@ const SpinPage = ({ charmsssr, Probability }) => {
       const res = await fetch("/api/user-spin/spin", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phoneNumber: spinPhoneNumber }),
+        body: JSON.stringify({ phoneNumber: userPhoneNumber }),
       });
       const data = await res.json();
       return data;
@@ -155,7 +155,7 @@ const SpinPage = ({ charmsssr, Probability }) => {
       setsucessModal(true);
 
       // Clear session data
-      sessionStorage.removeItem("spinPhoneNumber");
+      sessionStorage.removeItem("userPhoneNumber");
       sessionStorage.removeItem("spinUserName");
       return;
     }
@@ -235,7 +235,8 @@ const SpinPage = ({ charmsssr, Probability }) => {
 
   const charms = [charms1, charms2, charms3, charms2];
 
-  // Auto change every 2 seconds
+  // Decorative animation: cycles through charm images in the circular icon
+  // display above the spin button to create visual interest
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % charms.length);
@@ -353,15 +354,15 @@ const SpinPage = ({ charmsssr, Probability }) => {
                       y2="0"
                       gradientUnits="userSpaceOnUse"
                     >
-                      <stop stop-color="#FFA347" />
-                      <stop offset="0.13" stop-color="#FFE2AF" />
-                      <stop offset="0.16" stop-color="#E9C694" />
-                      <stop offset="0.22" stop-color="#B0814F" />
-                      <stop offset="0.28" stop-color="#703200" />
-                      <stop offset="0.49" stop-color="#FFF0CE" />
-                      <stop offset="0.61" stop-color="#FFBB57" />
-                      <stop offset="0.83" stop-color="#562C02" />
-                      <stop offset="1" stop-color="#FFE2AF" />
+                      <stop stopColor="#FFA347" />
+                      <stop offset="0.13" stopColor="#FFE2AF" />
+                      <stop offset="0.16" stopColor="#E9C694" />
+                      <stop offset="0.22" stopColor="#B0814F" />
+                      <stop offset="0.28" stopColor="#703200" />
+                      <stop offset="0.49" stopColor="#FFF0CE" />
+                      <stop offset="0.61" stopColor="#FFBB57" />
+                      <stop offset="0.83" stopColor="#562C02" />
+                      <stop offset="1" stopColor="#FFE2AF" />
                     </linearGradient>
                   </defs>
                 </svg>

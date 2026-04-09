@@ -9,6 +9,8 @@
  *   - spinAvailable: number (default: 1)
  */
 
+import { isValidPhoneNumber } from "libphonenumber-js";
+
 const STRAPI_URL = process.env.CMSURL;
 const SERVICE_UNAVAILABLE_MESSAGE =
   "Sorry, service unavailable. We are trying to get it back up!";
@@ -26,9 +28,9 @@ export function normalizePhoneNumber(phoneNumber) {
 }
 
 /**
- * Validate phone number format
- * Expects country code + 10 digit number (e.g., +919876543210 or 9876543210)
- * @param {string} phoneNumber - Phone number to validate
+ * Validate phone number format using libphonenumber-js
+ * Supports international phone numbers (7-15 digits based on country)
+ * @param {string} phoneNumber - Phone number to validate (with or without country code)
  * @returns {{ valid: boolean, error?: string }}
  */
 export function validatePhoneNumber(phoneNumber) {
@@ -38,18 +40,15 @@ export function validatePhoneNumber(phoneNumber) {
 
   const normalized = normalizePhoneNumber(phoneNumber);
 
-  // Check for minimum length (10 digits)
-  const digitsOnly = normalized.replace(/\+/g, "");
-  if (digitsOnly.length < 10) {
-    return { valid: false, error: "Phone number must be at least 10 digits" };
+  // Use libphonenumber-js for comprehensive validation
+  try {
+    if (!isValidPhoneNumber(normalized)) {
+      return { valid: false, error: "Please enter a valid phone number" };
+    }
+    return { valid: true };
+  } catch {
+    return { valid: false, error: "Please enter a valid phone number" };
   }
-
-  // Check for maximum length (country code + 10 digits = max ~15)
-  if (digitsOnly.length > 15) {
-    return { valid: false, error: "Phone number is too long" };
-  }
-
-  return { valid: true };
 }
 
 /**
@@ -63,15 +62,30 @@ export async function getUserByPhone(phoneNumber) {
   console.log(`[UserSpinService] Fetching user by phone: ${normalized}`);
 
   try {
-    const res = await fetch(
-      `${STRAPI_URL}/api/user-spins?filters[phoneNumber][$eq]=${normalized}`,
-      { cache: "no-store" }
-    );
+    // URL encode the phone number to handle special characters like +
+    const encodedPhone = encodeURIComponent(normalized);
+    const url = `${STRAPI_URL}/api/user-spins?filters[phoneNumber][$eq]=${encodedPhone}`;
+
+    console.log(`[UserSpinService] Query URL: ${url}`);
+
+    const res = await fetch(url, { cache: "no-store" });
 
     if (!res.ok) {
       console.error(
         `[UserSpinService] Strapi error: ${res.status} ${res.statusText}`
       );
+
+      // If Strapi returns 404, treat it as user not found
+      // This could happen if the collection doesn't exist yet or the endpoint is misconfigured
+      if (res.status === 404) {
+        console.log(`[UserSpinService] Collection or user not found (404 from Strapi)`);
+        return {
+          success: false,
+          error: "User not found",
+          status: 404,
+        };
+      }
+
       return {
         success: false,
         error: SERVICE_UNAVAILABLE_MESSAGE,
@@ -80,6 +94,8 @@ export async function getUserByPhone(phoneNumber) {
     }
 
     const result = await res.json();
+    console.log(`[UserSpinService] Strapi response:`, JSON.stringify(result, null, 2));
+
     const user = result?.data?.[0];
 
     if (!user) {

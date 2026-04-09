@@ -1,9 +1,20 @@
+/**
+ * No Spins Available Page
+ *
+ * This page renders when a user has already used their spin allocation (spinAvailable = 0).
+ * It displays a friendly message thanking them for participating and offers options to:
+ * - Explore more charms in the store
+ * - Try with a different phone number
+ * - Return to the home page
+ *
+ * Users are redirected here from the login page when their spin count is exhausted.
+ */
 "use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, ArrowRight, RefreshCw } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import charms1 from "../../../../../../public/charmsicons1.png";
 import charms2 from "../../../../../../public/charmsicons2.png";
 import charms3 from "../../../../../../public/charmsicons3.png";
@@ -22,7 +33,8 @@ const Page = () => {
     }
   }, []);
 
-  // Auto change charms every 2 seconds
+  // Decorative animation: cycles through charm images in the circular icon
+  // display to create visual interest on the "no spins available" page
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % charms.length);
@@ -30,134 +42,95 @@ const Page = () => {
     return () => clearInterval(interval);
   }, [charms.length]);
 
-  const handleTryDifferentNumber = () => {
-    sessionStorage.removeItem("spinPhoneNumber");
-    sessionStorage.removeItem("spinUserName");
-    router.push("/home/charms/spin-code/login");
-  };
-
   return (
-    <div className="relative w-full h-screen overflow-hidden">
-      {/* Premium Background with Unsplash Image */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?q=80&w=2070&auto=format&fit=crop"
-          alt="Elegant jewelry background"
+    <div className="relative w-full h-screen">
+      {/* Background video - matching other spin pages */}
+      <div className="w-full h-screen absolute top-0 left-0 z-0">
+        <video
+          src="https://ts-bucket.mum-objectstore.e2enetworks.net/evol_4b2a7deae5.mp4"
+          loop
+          autoPlay
+          muted
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
       </div>
 
-      {/* Decorative Elements */}
-      <div className="absolute top-20 left-20 w-32 h-32 bg-amber-400/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-40 right-20 w-48 h-48 bg-amber-400/10 rounded-full blur-3xl"></div>
-
-      {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full px-8">
-        {/* Animated Charms Icon */}
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="mb-12"
-        >
-          <div className="relative">
-            {/* Glow effect */}
-            <div className="absolute inset-0 bg-amber-400/20 rounded-full blur-2xl scale-150"></div>
-
-            {/* Charms container */}
-            <div className="relative h-[200px] w-[200px] rounded-full border-2 border-amber-400/50 p-[18px]">
-              <div className="bg-white h-full rounded-full p-6 flex items-center justify-center shadow-2xl">
-                <AnimatePresence mode="wait">
-                  <motion.img
-                    key={currentIndex}
-                    src={charms[currentIndex].src}
-                    alt="Charms"
-                    className="h-full w-full object-contain"
-                    initial={{ opacity: 0, rotateY: -90 }}
-                    animate={{ opacity: 1, rotateY: 0 }}
-                    exit={{ opacity: 0, rotateY: 90 }}
-                    transition={{ duration: 0.5, ease: "easeInOut" }}
-                  />
-                </AnimatePresence>
-              </div>
-            </div>
-
-            {/* Sparkle decorations */}
-            <Sparkles className="absolute -top-2 -right-2 text-amber-400 w-8 h-8" />
-            <Sparkles className="absolute -bottom-2 -left-2 text-amber-400/60 w-6 h-6" />
-          </div>
-        </motion.div>
-
-        {/* Message */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-center max-w-[800px]"
-        >
-          {userName && (
-            <p className="text-amber-400 text-[28px] mb-4 font-medium">
-              Hi {userName}!
-            </p>
-          )}
-
-          <h1 className="text-[56px] font-ethereal text-white leading-[70px] mb-6">
-            You've Already Used Your Spin
-          </h1>
-
-          <p className="text-[26px] text-white/80 leading-[42px] mb-4">
-            Thank you for participating in our lucky wheel!
-          </p>
-
-          <p className="text-[22px] text-white/60 leading-[36px]">
-            Come back later for more exciting rewards and chances to win beautiful gold charms.
-          </p>
-        </motion.div>
-
-        {/* Action Buttons */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-16 flex flex-col gap-5 w-full max-w-[500px]"
-        >
-          {/* Primary CTA - Explore More */}
+      {/* Foreground content */}
+      <div className="relative z-50 flex flex-col justify-between h-full">
+        {/* Header */}
+        <div className="h-[103px] flex-shrink-0 bg-gray-100/10 flex justify-between items-center px-[50px] w-full">
           <Link
-            href="/home/charms"
-            className="flex items-center justify-center gap-4 w-full h-[90px] bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-full text-[28px] font-medium shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 transition-all hover:scale-[1.02]"
+            href="/home/charms/spin-code/login"
+            className="flex text-black items-center gap-4 text-[24px]"
           >
-            Explore More Charms
-            <ArrowRight size={28} />
+            <ArrowLeft size={32} className="text-black" />
+            Back
           </Link>
-
-          {/* Secondary CTA - Try Different Number */}
-          <button
-            onClick={handleTryDifferentNumber}
-            className="flex items-center justify-center gap-4 w-full h-[90px] bg-white/10 backdrop-blur-sm text-white border border-white/20 rounded-full text-[26px] font-medium hover:bg-white/20 transition-all"
-          >
-            <RefreshCw size={24} />
-            Use Different Phone Number
-          </button>
-
-          {/* Home Link */}
+          <p className="text-black text-[30px]">Charms</p>
           <Link
             href="/home"
-            className="flex items-center justify-center w-full h-[70px] text-white/60 text-[22px] hover:text-white transition-colors"
+            className="rounded-md border-[2.207px] text-xl text-black border-black px-3 py-2 grid place-content-center"
           >
-            Return to Home
+            Home
           </Link>
-        </motion.div>
+        </div>
+
+        {/* Content */}
+        <div className="px-[100px] flex-1 flex flex-col items-center justify-center">
+          {/* Animated Charms Icon */}
+          <div className="h-[224px] w-[224px] rounded-full border-2 border-gray-500 mb-[50px] p-[22px]">
+            <div className="bg-white h-full rounded-full p-7 flex items-center justify-center">
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={currentIndex}
+                  src={charms[currentIndex].src}
+                  alt="Charms"
+                  className="h-full w-full object-contain"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.1 }}
+                  transition={{ duration: 0.6, ease: "easeInOut" }}
+                />
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {/* Message */}
+          <div className="text-center max-w-[800px] mb-[50px]">
+            {userName && (
+              <p className="text-white/80 text-[28px] mb-4">Hi {userName}!</p>
+            )}
+
+            <h1 className="text-[50px] font-ethereal text-white leading-[70px] mb-[26px]">
+              You've Already Used Your Spin
+            </h1>
+
+            <p className="text-[26px] text-[#F4EFEF] leading-[42px]">
+              Thank you for participating! Come back later for more exciting
+              rewards.
+            </p>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="w-full max-w-[600px] flex flex-col gap-5">
+            {/* Primary CTA - Explore More Charms */}
+            <Link
+              href="/home/charms"
+              className="bg-white font-ethereal text-[30px] h-[106px] text-center text-black flex items-center justify-center w-full rounded-full hover:bg-white/90 transition-colors"
+            >
+              Explore More Charms
+            </Link>
+          </div>
+        </div>
 
         {/* Footer Note */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="absolute bottom-8 text-white/40 text-[18px] text-center"
-        >
-          Each phone number gets one spin per visit. Check back soon for new opportunities!
-        </motion.p>
+        <div className="px-[100px] pb-[100px]">
+          <p className="text-white/40 text-[20px] text-center">
+            Each phone number gets one spin per visit. Check back soon for new
+            opportunities!
+          </p>
+        </div>
       </div>
     </div>
   );

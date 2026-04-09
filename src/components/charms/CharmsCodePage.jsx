@@ -14,7 +14,7 @@ import { ArrowLeft } from "lucide-react";
 const KeyboardKey = ({ label, onClick, className = "" }) => (
   <button
     onClick={onClick}
-    className={`min-w-[75px] px-2 h-[79px] rounded-[8px] text-black text-[40px] font-semibold bg-[#fff] backdrop-blur-sm hover:bg-[#FFFFFF25] transition-all ${className}`}
+    className={`min-w-18.75 px-2 h-19.75 rounded-lg text-black text-[40px] font-semibold bg-white backdrop-blur-sm hover:bg-[#FFFFFF25] transition-all ${className}`}
   >
     {label.toUpperCase() === "CAPS" && (
       <svg
@@ -114,7 +114,7 @@ const CharmsCodePage = ({ link }) => {
       if (!isKeyboardOpen) return;
       const target = event.target;
       if (target.closest('[data-keyboard="true"]')) return;
-      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') return;
+      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return;
       setIsKeyboardOpen(false);
     };
 
@@ -126,9 +126,21 @@ const CharmsCodePage = ({ link }) => {
     document.addEventListener("pointerdown", handleClickOutside, eventOptions);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside, eventOptions);
-      document.removeEventListener("touchstart", handleClickOutside, eventOptions);
-      document.removeEventListener("pointerdown", handleClickOutside, eventOptions);
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside,
+        eventOptions,
+      );
+      document.removeEventListener(
+        "touchstart",
+        handleClickOutside,
+        eventOptions,
+      );
+      document.removeEventListener(
+        "pointerdown",
+        handleClickOutside,
+        eventOptions,
+      );
     };
   }, [isKeyboardOpen]);
 
@@ -143,7 +155,7 @@ const CharmsCodePage = ({ link }) => {
       setIsCaps((prev) => !prev);
     } else {
       setInputValue(
-        (prev) => prev + (isCaps ? key.toUpperCase() : key.toLowerCase())
+        (prev) => prev + (isCaps ? key.toUpperCase() : key.toLowerCase()),
       );
     }
   };
@@ -165,7 +177,7 @@ const CharmsCodePage = ({ link }) => {
       throttle(() => {
         handleCheckEligibilityRef.current();
       }, 2000), // ⏱ 2 seconds
-    []
+    [],
   );
   return (
     <div className="relative w-full h-screen">
@@ -184,13 +196,13 @@ const CharmsCodePage = ({ link }) => {
           className="w-full h-full object-cover"
         ></video>
         {/* gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+        <div className="absolute inset-0 bg-linear-to-t from-black via-black/60 to-transparent"></div>
       </div>
 
       {/* Foreground content */}
       <div className="relative z-50 flex flex-col justify-between h-full">
         {/* Header */}
-        <div className="h-[103px] flex-shrink-0 bg-gray-100/10 flex justify-between items-center px-[50px] w-full">
+        <div className="h-25.75 shrink-0 bg-gray-100/10 flex justify-between items-center px-12.5 w-full">
           <Link
             href="/home/charms"
             className="flex text-white items-center gap-4 text-[24px]"
@@ -208,53 +220,53 @@ const CharmsCodePage = ({ link }) => {
         </div>
 
         {/* Input area */}
-        <div className="px-[100px] h-fit flex-col flex items-start mt-[40px]">
-          <div className=" w-full h-fit mt-[65px] mb-12">
-          <div className=" flex flex-col justify-center items-center w-full mb-[58px]">
-            <div className=" h-[224px] w-[224px] rounded-full border-2 border-gray-500 mb-[77px] p-[22px]">
-              <div className=" bg-white h-full rounded-full p-7 flex items-center justify-center text-black w-full">
-                <AnimatePresence mode="wait">
-                  <motion.img
-                    key={currentIndex}
-                    src={charms[currentIndex].src}
-                    alt="Charms"
-                    className="h-full w-full object-contain"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 1.1 }}
-                    transition={{ duration: 0.6, ease: "easeInOut" }}
-                  />
-                </AnimatePresence>
+        <div className="px-25 h-fit flex-col flex items-start mt-10">
+          <div className=" w-full h-fit mt-16.25 mb-12">
+            <div className=" flex flex-col justify-center items-center w-full mb-14.5">
+              <div className=" h-56 w-56 rounded-full border-2 border-gray-500 mb-19.25 p-5.5">
+                <div className=" bg-white h-full rounded-full p-7 flex items-center justify-center text-black w-full">
+                  <AnimatePresence mode="wait">
+                    <motion.img
+                      key={currentIndex}
+                      src={charms[currentIndex].src}
+                      alt="Charms"
+                      className="h-full w-full object-contain"
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 1.1 }}
+                      transition={{ duration: 0.6, ease: "easeInOut" }}
+                    />
+                  </AnimatePresence>
+                </div>
+              </div>
+              <p className="  text-[50px] font-ethereal  text-center text-white mb-6.5 leading-20">
+                Have a Code? Let’s Check it．
+              </p>
+              <p className=" text-[26px] leading-14 text-[#F4EFEF]">
+                Enter your code below to see if you’ve unlocked a gold charm.
+              </p>
+            </div>
+            <div className=" w-full mb-16">
+              <label
+                htmlFor=" Code"
+                className=" text-white text-[24px] w-full leading-12.5"
+              >
+                {" "}
+                Code
+              </label>
+
+              <div className="px-11.25 rounded-xl overflow-hidden bg-[#FFFFFF29] h-27 w-full border-2 flex gap-2 items-center border-[#EDD9D942]">
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onFocus={handleInputFocus}
+                  className="text-4xl h-full bg-transparent outline-none w-full text-white placeholder-white/60"
+                  placeholder="Type your answer..."
+                />
               </div>
             </div>
-            <p className="  text-[50px] font-ethereal  text-center text-white mb-[26px] leading-[80px]">
-              Have a Code? Let’s Check it．
-            </p>
-            <p className=" text-[26px] leading-[56px] text-[#F4EFEF]">
-              Enter your code below to see if you’ve unlocked a gold charm.
-            </p>
           </div>
-          <div className=" w-full mb-[64px]">
-            <label
-              htmlFor=" Code"
-              className=" text-white text-[24px] w-full leading-[50px]"
-            >
-              {" "}
-              Code
-            </label>
-
-            <div className="px-[45px] rounded-[12px] overflow-hidden bg-[#FFFFFF29] h-[108px] w-full border-2 flex gap-2 items-center border-[#EDD9D942]">
-              <input
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onFocus={handleInputFocus}
-                className="text-4xl h-full bg-transparent outline-none w-full text-white placeholder-white/60"
-                placeholder="Type your answer..."
-              />
-            </div>
-          </div>
-        </div>
         </div>
 
         {/* Keyboard */}
@@ -266,10 +278,14 @@ const CharmsCodePage = ({ link }) => {
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="border-t border-white/20 bg-gray-200/20 backdrop-blur-md py-8 h-fit pb-[180px] flex flex-col gap-4 items-center justify-start pt-[89px] px-[100px]"
+              className="border-t border-white/20 bg-gray-200/20 backdrop-blur-md py-8 h-fit pb-45 flex flex-col gap-4 items-center justify-start pt-22.25 px-25"
             >
               {rows.map((row, rowIndex) => (
-                <div key={rowIndex} className="flex gap-3 justify-center" data-keyboard="true">
+                <div
+                  key={rowIndex}
+                  className="flex gap-3 justify-center"
+                  data-keyboard="true"
+                >
                   {row.map((key) => (
                     <KeyboardKey
                       key={key}
@@ -281,8 +297,8 @@ const CharmsCodePage = ({ link }) => {
                             ? "mr-10 px-5"
                             : "bg-[#FFFFFF25] mr-10 px-5"
                           : key === "Back"
-                          ? " ml-10 px-5 hover:bg-red-300/80 text-black"
-                          : ""
+                            ? " ml-10 px-5 hover:bg-red-300/80 text-black"
+                            : ""
                       }
                     />
                   ))}
@@ -290,7 +306,7 @@ const CharmsCodePage = ({ link }) => {
               ))}
               <button
                 onClick={throttledCheckEligibility}
-                className=" bg-white font-ethereal text-[30px] h-[106px] text-center text-black  mt-[96px] flex items-center justify-center w-full rounded-full"
+                className=" bg-white font-ethereal text-[30px] h-26.5 text-center text-black mt-24 flex items-center justify-center w-full rounded-full"
               >
                 {clickoncheckcode ? "Checking..." : "Check Eligibility"}
               </button>
@@ -300,10 +316,10 @@ const CharmsCodePage = ({ link }) => {
 
         {/* Show button when keyboard is hidden */}
         {!isKeyboardOpen && (
-          <div className="px-[100px] pb-[50px]">
+          <div className="px-25 pb-12.5">
             <button
               onClick={throttledCheckEligibility}
-              className=" bg-white font-ethereal text-[30px] h-[106px] text-center text-black flex items-center justify-center w-full rounded-full"
+              className=" bg-white font-ethereal text-[30px] h-26.5 text-center text-black flex items-center justify-center w-full rounded-full"
             >
               {clickoncheckcode ? "Checking..." : "Check Eligibility"}
             </button>
