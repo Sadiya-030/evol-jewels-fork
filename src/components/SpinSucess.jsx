@@ -34,16 +34,12 @@ const SpinSucess = ({ isOpen, setIsOpen, isSucess }) => {
           >
             {isSucess ? (
               <div className=" w-full px-[67px]">
-                <div className=" bg-white h-[191px] overflow-hidden mb-[55px] mx-auto w-[191px]">
-                  <video
-                    src={
-                      "https://ts-bucket.mum-objectstore.e2enetworks.net/REC_20250911102959_1_5ba8eed492.mp4"
-                    }
-                    loop
-                    mute
-                    autoPlay
-                    className=" w-auto mx-auto scale-105 h-[191px] object-cover"
-                  ></video>
+                <div className=" bg-white h-[191px] overflow-hidden mb-[55px] mx-auto w-[191px] flex items-center justify-center">
+                  <img
+                    src="https://images.unsplash.com/photo-1513885535751-8b9238bd345a?w=400&q=80"
+                    alt="Success"
+                    className=" w-auto mx-auto h-[191px] object-cover rounded-full"
+                  />
                 </div>
                 <p className=" text-black text-center text-[58px] leading-[68px]">
                   You Won a Real Gold Charm!{" "}
@@ -64,9 +60,10 @@ const SpinSucess = ({ isOpen, setIsOpen, isSucess }) => {
               <div className=" w-full px-[67px]">
                 <div className=" bg-white h-[191px] overflow-hidden  mb-[55px] mx-auto w-[191px]">
                   <img
-                    src="https://ts-bucket.mum-objectstore.e2enetworks.net/Frame_1000010535_dbd42f6409.jpg"
-                    className=" w-auto mx-auto  h-[191px] object-cover"
-                  ></img>
+                    src="https://images.unsplash.com/photo-1590736969955-71cc94901144?w=400&q=80"
+                    alt="Try again"
+                    className=" w-auto mx-auto h-[191px] object-cover rounded-full"
+                  />
                 </div>
                 <p className=" text-black text-center text-[58px] leading-[68px]">
                   Not This Time…

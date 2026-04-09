@@ -276,6 +276,7 @@ const SpinPage = ({ charmsssr, Probability }) => {
             </div>
           </div>
         </div>
+        </div>
 
         {/* spin */}
         <div className="  w-full overflow-hidden  scale-100 pt-[100px]   h-full">
