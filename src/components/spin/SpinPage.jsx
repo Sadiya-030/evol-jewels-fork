@@ -11,6 +11,7 @@ import { markCouponAsUsed, markSpinCouponAsUsed } from "../../utils/Apis";
 import { charmsCode } from "../../store/CharmsCode/charmsCode";
 import { useRouter } from "next/navigation";
 import NotificationModal from "../ui/NotificationModal";
+import { ArrowLeft } from "lucide-react";
 
 const SpinPage = ({ charmsssr, Probability }) => {
   const charmsData = [
@@ -29,6 +30,7 @@ const SpinPage = ({ charmsssr, Probability }) => {
   const [result, setResult] = useState(null);
   const [notifimodal, setnotifimodal] = useState(false);
   const [notifymsg, setnotifymsg] = useState("");
+  const [isHydrated, setIsHydrated] = useState(false);
 
   // Fallback images for charms
   const fallbackImages = [charms1.src, charms2.src, charms3.src];
@@ -72,11 +74,24 @@ const SpinPage = ({ charmsssr, Probability }) => {
     },
     { id: 8, emoji: "", label: "", isWin: false, probability: 0.05 },
   ];
+
+  // Wait for store hydration before checking session
   useEffect(() => {
-    if (charmsSize === null || charmsSize === "") {
+    setIsHydrated(true);
+  }, []);
+
+  // Check session only after hydration
+  useEffect(() => {
+    if (!isHydrated) return;
+
+    // Check both store and sessionStorage for valid session
+    const hasSession = sessionStorage.getItem("charmSessionId");
+    const hasCharmsSize = charmsSize !== null && charmsSize !== "";
+
+    if (!hasSession && !hasCharmsSize) {
       router.push("/home/charms");
     }
-  }, []);
+  }, [isHydrated, charmsSize]);
 
   const segmentAngle = 360 / segments.length;
 
@@ -207,6 +222,13 @@ const SpinPage = ({ charmsssr, Probability }) => {
       <div className="relative overflow-hidden z-50 flex flex-col justify-between h-full">
         {/* Header */}
         <div className="h-[103px] flex-shrink-0 bg-gray-100/10 flex justify-between items-center px-[50px] w-full">
+          <button
+            onClick={() => router.back()}
+            className="flex text-white items-center gap-4 text-[24px]"
+          >
+            <ArrowLeft size={32} className="text-white" />
+            Back
+          </button>
           <p className="text-white text-[30px]">Charms</p>
           <Link
             href="/home"
@@ -219,42 +241,6 @@ const SpinPage = ({ charmsssr, Probability }) => {
         {/* Input area */}
         <div className="px-[100px] h-fit flex-col flex items-start mt-[40px]">
           <div className=" w-full h-fit mt-[65px] mb-12">
-            <Link
-              href="/"
-              className=" flex text-white items-center h-fit text-[36px] leading-[71px] gap-8"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="51"
-                height="51"
-                viewBox="0 0 51 51"
-                fill="none"
-              >
-                <g clipPath="url(#clip0_1584_3815)">
-                  <path
-                    d="M43.0312 25.5H7.96875"
-                    stroke="white"
-                    strokeWidth="1.61905"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M22.3125 11.1562L7.96875 25.5L22.3125 39.8438"
-                    stroke="white"
-                    strokeWidth="1.61905"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </g>
-                <defs>
-                  <clipPath id="clip0_1584_3815">
-                    <rect width="51" height="51" fill="white" />
-                  </clipPath>
-                </defs>
-              </svg>
-              Back
-            </Link>
-          </div>
           <div className=" flex flex-col justify-center items-center w-full mb-[58px]">
             <div className=" h-[224px] w-[224px] rounded-full border-2 border-gray-500 mb-[77px] p-[22px]">
               <div className=" bg-white h-full rounded-full p-7 flex items-center justify-center text-black w-full">

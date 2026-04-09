@@ -9,6 +9,7 @@ import { charmsCode } from "../../store/CharmsCode/charmsCode";
 import { useRouter } from "next/navigation";
 import NotificationModal from "../ui/NotificationModal";
 import { throttle } from "../../utils/throttle";
+import { ArrowLeft } from "lucide-react";
 
 const KeyboardKey = ({ label, onClick, className = "" }) => (
   <button
@@ -190,9 +191,16 @@ const CharmsCodePage = ({ link }) => {
       <div className="relative z-50 flex flex-col justify-between h-full">
         {/* Header */}
         <div className="h-[103px] flex-shrink-0 bg-gray-100/10 flex justify-between items-center px-[50px] w-full">
-          <p className="text-white text-[30px]">Charms</p>
           <Link
             href="/home/charms"
+            className="flex text-white items-center gap-4 text-[24px]"
+          >
+            <ArrowLeft size={32} className="text-white" />
+            Back
+          </Link>
+          <p className="text-white text-[30px]">Charms</p>
+          <Link
+            href="/home"
             className="rounded-md border-[2.207px] text-xl text-white border-[#FFFFFF66] px-3 py-2 grid place-content-center"
           >
             Home
@@ -202,42 +210,6 @@ const CharmsCodePage = ({ link }) => {
         {/* Input area */}
         <div className="px-[100px] h-fit flex-col flex items-start mt-[40px]">
           <div className=" w-full h-fit mt-[65px] mb-12">
-            <Link
-              href="/home/charms"
-              className=" flex text-white items-center h-fit text-[36px] leading-[71px] gap-8"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="51"
-                height="51"
-                viewBox="0 0 51 51"
-                fill="none"
-              >
-                <g clipPath="url(#clip0_1584_3815)">
-                  <path
-                    d="M43.0312 25.5H7.96875"
-                    stroke="white"
-                    strokeWidth="1.61905"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M22.3125 11.1562L7.96875 25.5L22.3125 39.8438"
-                    stroke="white"
-                    strokeWidth="1.61905"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </g>
-                <defs>
-                  <clipPath id="clip0_1584_3815">
-                    <rect width="51" height="51" fill="white" />
-                  </clipPath>
-                </defs>
-              </svg>
-              Back
-            </Link>
-          </div>
           <div className=" flex flex-col justify-center items-center w-full mb-[58px]">
             <div className=" h-[224px] w-[224px] rounded-full border-2 border-gray-500 mb-[77px] p-[22px]">
               <div className=" bg-white h-full rounded-full p-7 flex items-center justify-center text-black w-full">
@@ -282,6 +254,7 @@ const CharmsCodePage = ({ link }) => {
               />
             </div>
           </div>
+        </div>
         </div>
 
         {/* Keyboard */}

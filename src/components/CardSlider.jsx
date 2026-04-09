@@ -7,12 +7,13 @@ import "swiper/css/pagination";
 import "swiper/css/free-mode";
 import img2 from "../../public/bow.png";
 import { useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import gemstone from "../../public/gemstone.jpg";
 import charms1 from "../../public/charmsicons1.png";
 import charms2 from "../../public/charmsicons2.png";
 import charms3 from "../../public/charmsicons3.png";
 const CardSlider = () => {
+  const router = useRouter();
   const slides = [
     {
       id: 1,
@@ -20,7 +21,7 @@ const CardSlider = () => {
       url: "/home/gift-joy",
       description: "This is card 1 description",
       stone: img2.src,
-      src: "https://ts-bucket.mum-objectstore.e2enetworks.net/Frame_1000010385_1_2b181f9558.png",
+      src: "/giftjoy.png",
     },
     {
       id: 2,
@@ -29,7 +30,7 @@ const CardSlider = () => {
       description: "This is card 2 description",
       stone: charms1.src,
 
-      src: "https://ts-bucket.mum-objectstore.e2enetworks.net/Frame_1000010385_3_dec9029e06.png",
+      src: "/charms.png",
     },
     {
       id: 3,
@@ -63,6 +64,13 @@ const CardSlider = () => {
       >
         {slides.map((slide, index) => {
           const isActive = index === activeIndex;
+
+          const handleCardClick = () => {
+            if (isActive) {
+              router.push(slide.url);
+            }
+          };
+
           return (
             <SwiperSlide
               key={slide.id}
@@ -71,8 +79,9 @@ const CardSlider = () => {
               <div className="h-[1350px]   flex justify-center items-end w-full">
                 <div className="w-[776px] h-fit">
                   <div
+                    onClick={handleCardClick}
                     className={`${
-                      isActive ? "h-[926px]" : "h-[600px]"
+                      isActive ? "h-[926px] cursor-pointer" : "h-[600px]"
                     } transition-all duration-1000 ease-in-out relative w-[776px] overflow-visible p-[18px] rounded-[55px] border-[2px] border-[#BE996A]`}
                   >
                     <div className=" overflow-hidden relative text-[45px] text-center  rounded-[50px]  w-full h-full flex items-center justify-center">
@@ -106,23 +115,17 @@ const CardSlider = () => {
                     </div>
                   </div>
 
-                  <div className="h-[320px]   relative transition-all duration-1000 ease-in-out">
+                  <div className="h-[200px] relative transition-all duration-1000 ease-in-out">
                     <div
                       className={`${
-                        isActive ? "bottom-0" : "bottom-[-290px]"
+                        isActive
+                          ? "bottom-0 opacity-100"
+                          : "bottom-[-100px] opacity-0"
                       } absolute left-0 w-full h-fit transition-all pb-6 px-4 duration-1000 ease-in-out`}
                     >
-                      <p className="mb-[34px] text-white mt-[134px] text-center text-[28px]">
-                        Explore curated pieces to surprise someone special
+                      <p className="text-white mt-[134px] text-center text-[28px]">
+                        Tap to Explore
                       </p>
-                      <Link
-                        href={slide.url}
-                        className="text-[40px] font-ethereal h-[103px] bg-white text-black
-             flex items-center justify-center w-full rounded-[2000px]
-             shadow-[0_0_30px_rgba(255,255,255,0.7)]"
-                      >
-                        Enter the journey
-                      </Link>
                     </div>
                   </div>
                 </div>

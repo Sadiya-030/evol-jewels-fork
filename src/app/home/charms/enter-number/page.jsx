@@ -5,6 +5,7 @@ import charms1 from "../../../../../public/charmsicons1.png";
 import charms2 from "../../../../../public/charmsicons2.png";
 import charms3 from "../../../../../public/charmsicons3.png";
 import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft } from "lucide-react";
 
 const KeyboardKey = ({ label, onClick, className = "" }) => (
   <button
@@ -172,35 +173,7 @@ const Page = () => {
               href="/"
               className=" flex items-center h-fit text-[36px] leading-[71px] gap-8"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="51"
-                height="51"
-                viewBox="0 0 51 51"
-                fill="none"
-              >
-                <g clipPath="url(#clip0_1584_3815)">
-                  <path
-                    d="M43.0312 25.5H7.96875"
-                    stroke="white"
-                    strokeWidth="1.61905"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M22.3125 11.1562L7.96875 25.5L22.3125 39.8438"
-                    stroke="white"
-                    strokeWidth="1.61905"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </g>
-                <defs>
-                  <clipPath id="clip0_1584_3815">
-                    <rect width="51" height="51" fill="white" />
-                  </clipPath>
-                </defs>
-              </svg>
+              <ArrowLeft size={51} className="text-white" />
               Back
             </Link>
           </div>
