@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { charmsCode } from "../../store/CharmsCode/charmsCode";
 
 const CardSlider2 = () => {
+  const scrollContainerRef = useRef(null);
   const router = useRouter();
   const slides = [
     {
@@ -42,8 +43,62 @@ const CardSlider2 = () => {
     setCharmsSize(null);
   }, []);
 
+  // Enable smooth touch scrolling
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    const handleMouseDown = (e) => {
+      isDown = true;
+      container.classList.add("cursor-grabbing");
+      startX = e.pageX - container.offsetLeft;
+      scrollLeft = container.scrollLeft;
+    };
+
+    const handleMouseLeave = () => {
+      isDown = false;
+      container.classList.remove("cursor-grabbing");
+    };
+
+    const handleMouseUp = () => {
+      isDown = false;
+      container.classList.remove("cursor-grabbing");
+    };
+
+    const handleMouseMove = (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - container.offsetLeft;
+      const walk = (x - startX) * 2;
+      container.scrollLeft = scrollLeft - walk;
+    };
+
+    container.addEventListener("mousedown", handleMouseDown);
+    container.addEventListener("mouseleave", handleMouseLeave);
+    container.addEventListener("mouseup", handleMouseUp);
+    container.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      container.removeEventListener("mousedown", handleMouseDown);
+      container.removeEventListener("mouseleave", handleMouseLeave);
+      container.removeEventListener("mouseup", handleMouseUp);
+      container.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
   return (
-    <div className="w-full h-[1400px] mt-[46px] mb-[106px] overflow-hidden">
+    <div
+      ref={scrollContainerRef}
+      className="w-full mt-[46px] mb-[106px] overflow-x-auto no-scrollbar scrollbar-hide cursor-grab touch-pan-x"
+      style={{
+        WebkitOverflowScrolling: "touch",
+        scrollBehavior: "smooth"
+      }}
+    >
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div className="w-[950px] h-[1100px] rounded-full bg-white/23 blur-[50px]"></div>
       </div>

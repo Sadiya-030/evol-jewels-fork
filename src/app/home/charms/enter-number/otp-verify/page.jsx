@@ -80,9 +80,21 @@ const Page = () => {
     document.addEventListener("pointerdown", handleClickOutside, eventOptions);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside, eventOptions);
-      document.removeEventListener("touchstart", handleClickOutside, eventOptions);
-      document.removeEventListener("pointerdown", handleClickOutside, eventOptions);
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside,
+        eventOptions,
+      );
+      document.removeEventListener(
+        "touchstart",
+        handleClickOutside,
+        eventOptions,
+      );
+      document.removeEventListener(
+        "pointerdown",
+        handleClickOutside,
+        eventOptions,
+      );
     };
   }, [isKeyboardOpen]);
 
@@ -134,55 +146,25 @@ const Page = () => {
       <div className="relative z-50 flex flex-col justify-between h-full">
         {/* Header */}
         <div className="h-[103px] bg-gray-100/10 flex justify-between items-center px-[50px]">
+          <Link
+            href="/home/charms/enter-number"
+            className="flex text-white items-center gap-4 text-[24px]"
+          >
+            <ArrowLeft size={32} strokeWidth={2} />
+            Back
+          </Link>
           <p className="text-white text-[30px]">Charms</p>
           <Link
             href="/home"
-            className="rounded-full border-[2.207px] border-[#FFFFFF66] h-[64px] w-[64px] grid place-content-center"
+            className="rounded-md border-[2.207px] text-xl text-white border-[#FFFFFF66] px-3 py-2 grid place-content-center"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="37"
-              height="37"
-              viewBox="0 0 37 37"
-              fill="none"
-            >
-              <g clipPath="url(#clip0_1305_623)">
-                <path
-                  d="M28.7358 8.04492L8.04614 28.7346"
-                  stroke="white"
-                  strokeWidth="2.29885"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M28.7358 28.7346L8.04614 8.04492"
-                  stroke="white"
-                  strokeWidth="2.29885"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </g>
-              <defs>
-                <clipPath id="clip0_1305_623">
-                  <rect width="36.7816" height="36.7816" fill="white" />
-                </clipPath>
-              </defs>
-            </svg>
+            Home
           </Link>
         </div>
 
         {/* Content */}
         <div className="px-[100px] flex flex-col items-start mt-[40px]">
-          <div className=" w-full h-fit mt-[65px] mb-10">
-            <Link
-              href="/"
-              className=" flex items-center h-fit text-[36px] leading-[71px] gap-8"
-            >
-              <ArrowLeft size={51} className="text-white" />
-              Back
-            </Link>
-          </div>
-          <div className="flex flex-col justify-center items-center w-full mb-[58px]">
+          <div className="flex flex-col justify-center items-center w-full mb-[58px] mt-[65px]">
             <div className="h-[224px] w-[224px] rounded-full border-2 border-gray-500 mb-[77px] p-[22px]">
               <div className="bg-white h-full rounded-full p-7 flex items-center justify-center">
                 <AnimatePresence mode="wait">
@@ -247,7 +229,11 @@ const Page = () => {
               className="border-t border-white/20 bg-gray-200/20 backdrop-blur-md py-8 h-fit pb-[180px] flex flex-col gap-4 items-center justify-start pt-[89px] px-[100px]"
             >
               {rows.map((row, rowIndex) => (
-                <div key={rowIndex} className="flex gap-3 justify-center" data-keyboard="true">
+                <div
+                  key={rowIndex}
+                  className="flex gap-3 justify-center"
+                  data-keyboard="true"
+                >
                   {row.map((key) => (
                     <KeyboardKey
                       key={key}
@@ -259,8 +245,8 @@ const Page = () => {
                             ? ""
                             : "bg-[#FFFFFF25] mr-10 px-5"
                           : key === "Back"
-                          ? "ml-10 px-5 hover:bg-red-300/80 text-black"
-                          : ""
+                            ? "ml-10 px-5 hover:bg-red-300/80 text-black"
+                            : ""
                       }
                     />
                   ))}
