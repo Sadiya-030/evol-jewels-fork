@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { ArrowLeft } from "lucide-react";
 import charms1 from "../../../../../public/charmsicons1.png";
 import charms2 from "../../../../../public/charmsicons2.png";
 import charms3 from "../../../../../public/charmsicons3.png";
@@ -129,40 +130,19 @@ const Page = () => {
       <div className="relative z-50 flex flex-col justify-between h-full">
         {/* Header */}
         <div className="h-[103px] flex-shrink-0 bg-gray-100/10 flex justify-between items-center px-[50px] w-full">
+          <Link
+            href="/home/charms"
+            className="flex text-white items-center gap-4 text-[24px]"
+          >
+            <ArrowLeft size={32} className="text-white" />
+            Back
+          </Link>
           <p className="text-white text-[30px]">Charms</p>
           <Link
             href="/home"
-            className="rounded-full border-[2.207px] border-[#FFFFFF66] h-[64px] w-[64px] grid place-content-center"
+            className="rounded-md border-[2.207px] text-xl text-white border-[#FFFFFF66] px-3 py-2 grid place-content-center"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="37"
-              height="37"
-              viewBox="0 0 37 37"
-              fill="none"
-            >
-              <g clipPath="url(#clip0_1305_623)">
-                <path
-                  d="M28.7358 8.04492L8.04614 28.7346"
-                  stroke="white"
-                  strokeWidth="2.29885"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M28.7358 28.7346L8.04614 8.04492"
-                  stroke="white"
-                  strokeWidth="2.29885"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </g>
-              <defs>
-                <clipPath id="clip0_1305_623">
-                  <rect width="36.7816" height="36.7816" fill="white" />
-                </clipPath>
-              </defs>
-            </svg>
+            Home
           </Link>
         </div>
 

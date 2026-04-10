@@ -184,7 +184,7 @@ const CharmsCodePage = ({ link }) => {
           className="w-full h-full object-cover"
         ></video>
         {/* gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+        <div className="absolute inset-0 bg-blue-950/85"></div>
       </div>
 
       {/* Foreground content */}
@@ -203,7 +203,9 @@ const CharmsCodePage = ({ link }) => {
             href="/home"
             className="rounded-md border-[2.207px] text-xl text-white border-[#FFFFFF66] px-3 py-2 grid place-content-center"
           >
-            Home
+            <p className="text-xl text-white px-3 py-2 grid place-content-center">
+              Home
+            </p>
           </Link>
         </div>
 

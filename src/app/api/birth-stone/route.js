@@ -1,26 +1,16 @@
 const gemstoneImages = {
-  garnet:
-    "https://mum-objectstore.e2enetworks.net/bharatflooring-uploads/bharatflooring-uploads/Gifting%20Flow/20166%202.png",
-  amethyst:
-    "https://mum-objectstore.e2enetworks.net/bharatflooring-uploads/bharatflooring-uploads/uploadsr/designer/amethyst.png",
-  aquamarine:
-    "https://mum-objectstore.e2enetworks.net/bharatflooring-uploads/bharatflooring-uploads/uploadsr/designer/aquamarine.png",
-  diamond:
-    "https://mum-objectstore.e2enetworks.net/bharatflooring-uploads/bharatflooring-uploads/uploadsr/designer/diamond.png",
-  emerald:
-    "https://mum-objectstore.e2enetworks.net/bharatflooring-uploads/bharatflooring-uploads/uploadsr/designer/emerald.png",
-  pearl:
-    "https://mum-objectstore.e2enetworks.net/bharatflooring-uploads/bharatflooring-uploads/uploadsr/designer/pearl.png",
-  ruby: "https://mum-objectstore.e2enetworks.net/bharatflooring-uploads/bharatflooring-uploads/uploadsr/designer/ruby.png",
-  sapphire:
-    "https://mum-objectstore.e2enetworks.net/bharatflooring-uploads/bharatflooring-uploads/uploadsr/designer/sapphire.png",
-  opal: "https://mum-objectstore.e2enetworks.net/bharatflooring-uploads/bharatflooring-uploads/uploadsr/designer/opal.png",
-  topaz:
-    "https://mum-objectstore.e2enetworks.net/bharatflooring-uploads/bharatflooring-uploads/uploadsr/designer/topaz.png",
-  turquoise:
-    "https://mum-objectstore.e2enetworks.net/bharatflooring-uploads/bharatflooring-uploads/uploadsr/designer/turquoise.png",
-  agate:
-    "https://mum-objectstore.e2enetworks.net/bharatflooring-uploads/bharatflooring-uploads/uploadsr/designer/agate.png",
+  garnet: "https://images.unsplash.com/photo-1551122089-4e3e72477432?w=400&q=80",
+  amethyst: "https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?w=400&q=80",
+  aquamarine: "https://images.unsplash.com/photo-1583937443566-6b087e0f78c8?w=400&q=80",
+  diamond: "https://images.unsplash.com/photo-1586104237516-5765cf54e56a?w=400&q=80",
+  emerald: "https://images.unsplash.com/photo-1574948495680-f13dc97c0964?w=400&q=80",
+  pearl: "https://images.unsplash.com/photo-1591209627710-d2427a93a890?w=400&q=80",
+  ruby: "https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?w=400&q=80",
+  sapphire: "https://images.unsplash.com/photo-1615655114865-4cc1fda5c6e9?w=400&q=80",
+  opal: "https://images.unsplash.com/photo-1602751584552-8ba73aad10e1?w=400&q=80",
+  topaz: "https://images.unsplash.com/photo-1583937443566-6b087e0f78c8?w=400&q=80",
+  turquoise: "https://images.unsplash.com/photo-1596944924616-7b38e7cfac36?w=400&q=80",
+  agate: "https://images.unsplash.com/photo-1615655114865-4cc1fda5c6e9?w=400&q=80",
 };
 
 const sunSignData = {

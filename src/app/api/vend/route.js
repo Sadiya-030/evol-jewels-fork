@@ -55,7 +55,7 @@ export async function POST(req) {
       // ❌ If CMS API fails
       if (!fetchSlotRes.ok) {
         return NextResponse.json(
-          { success: false, message: "Service unavailable" },
+          { success: false, message: "Sorry, service unavailable. We are trying to get it back up!" },
           { status: 400 },
         );
       }
