@@ -35,7 +35,7 @@ export const markCouponAsUsed = async (
     });
 
     if (!espResponse.ok) {
-      throw new Error("Service unavailable");
+      throw new Error("Sorry, service unavailable. We are trying to get it back up!");
     }
 
     const espText = await espResponse.text();

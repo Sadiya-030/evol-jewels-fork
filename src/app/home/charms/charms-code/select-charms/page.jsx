@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import CharmsWithNamePrice from "../../../../../components/CharmsWithNamePrice";
 import { motion } from "framer-motion";
 import { Suspense } from "react";
@@ -118,13 +119,19 @@ function PageContent() {
       {/* main content */}
       <div className="relative z-50 w-full h-full">
         {/* header */}
-        <div className="h-[103px] relative z-50 mt-[-5px] flex-shrink-0 bg-gray-200/40 flex justify-between items-center px-[50px] w-full">
-          <p className="text-black text-[30px]">Charms</p>
-
+        <div className="h-[103px] relative z-50 mt-[-5px] flex-shrink-0 bg-white/95 backdrop-blur-md shadow-sm flex justify-between items-center px-[50px] w-full">
+          <Link
+            href="/home/charms/charms-code"
+            className="flex text-gray-800 items-center gap-4 text-[24px]"
+          >
+            <ArrowLeft size={32} className="text-gray-800" />
+            Back
+          </Link>
+          <p className="text-gray-800 text-[30px] font-medium">Charms</p>
           <Link
             onClick={() => setCharmsSize(null)}
-            href="/home/charms"
-            className="rounded-md border-[2.207px] text-black text-xl border-[#19191966] px-3 py-2 grid place-content-center"
+            href="/home"
+            className="rounded-md border-[2px] text-gray-800 text-xl border-gray-300 bg-gray-100 px-4 py-2 grid place-content-center hover:bg-gray-200 transition-colors"
           >
             Home
           </Link>

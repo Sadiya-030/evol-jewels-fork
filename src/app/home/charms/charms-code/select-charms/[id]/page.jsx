@@ -2,6 +2,7 @@
 import Link from "next/link";
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import charmsImg from "../../../../../../../public/charmsicons2.png";
 import SuccessModal from "../../../../../../components/ui/SuccessModal";
 import { charmsCode } from "../../../../../../store/CharmsCode/charmsCode";
@@ -140,12 +141,18 @@ const Page = () => {
       {/* main content */}
       <div className="relative z-50 w-full h-full">
         {/* header */}
-        <div className="h-[103px] mt-[-5px] flex-shrink-0 bg-gray-100/10 flex justify-between items-center px-[50px] w-full">
-          <p className="text-black text-[30px]">Charms</p>
-
+        <div className="h-[103px] mt-[-5px] flex-shrink-0 bg-white/95 backdrop-blur-md shadow-sm flex justify-between items-center px-[50px] w-full">
           <Link
-            href="/home/charms"
-            className="rounded-md border-[2.207px] text-xl text-black border-[#16161666] px-3 py-2 grid place-content-center"
+            href="/home/charms/charms-code/select-charms"
+            className="flex text-gray-800 items-center gap-4 text-[24px]"
+          >
+            <ArrowLeft size={32} className="text-gray-800" />
+            Back
+          </Link>
+          <p className="text-gray-800 text-[30px] font-medium">Charms</p>
+          <Link
+            href="/home"
+            className="rounded-md border-[2px] text-xl text-gray-800 border-gray-300 bg-gray-100 px-4 py-2 grid place-content-center hover:bg-gray-200 transition-colors"
           >
             Home
           </Link>

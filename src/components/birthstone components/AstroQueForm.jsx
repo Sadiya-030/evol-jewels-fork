@@ -35,9 +35,9 @@ const AstroQueForm = () => {
       if (!isKeyboardOpen) return;
       const target = event.target;
       if (target.closest('[data-keyboard="true"]')) return;
-      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') return;
+      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return;
       // Don't close if clicking on date picker
-      if (target.closest('.react-datepicker')) return;
+      if (target.closest(".react-datepicker")) return;
       setIsKeyboardOpen(false);
       setActiveField("");
     };
@@ -50,9 +50,21 @@ const AstroQueForm = () => {
     document.addEventListener("pointerdown", handleClickOutside, eventOptions);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside, eventOptions);
-      document.removeEventListener("touchstart", handleClickOutside, eventOptions);
-      document.removeEventListener("pointerdown", handleClickOutside, eventOptions);
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside,
+        eventOptions,
+      );
+      document.removeEventListener(
+        "touchstart",
+        handleClickOutside,
+        eventOptions,
+      );
+      document.removeEventListener(
+        "pointerdown",
+        handleClickOutside,
+        eventOptions,
+      );
     };
   }, [isKeyboardOpen]);
 
@@ -92,7 +104,7 @@ const AstroQueForm = () => {
         ...data,
         birthdate: d
           ? `${String(d.getDate()).padStart(2, "0")}-${String(
-              d.getMonth() + 1
+              d.getMonth() + 1,
             ).padStart(2, "0")}-${d.getFullYear()}`
           : null,
       };
