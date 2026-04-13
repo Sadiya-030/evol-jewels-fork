@@ -23,7 +23,10 @@ export async function POST(req) {
   } catch (error) {
     console.error("Strapi fetch failed:", error);
     return Response.json(
-      { success: false, message: "Sorry, service unavailable. We are trying to get it back up!" },
+      {
+        success: false,
+        message: "Sorry, service unavailable. We are trying to get it back up!",
+      },
       { status: 503 },
     );
   }
@@ -33,7 +36,10 @@ export async function POST(req) {
     const errorText = await res.text();
     console.error("Strapi API error:", res.status, errorText);
     return Response.json(
-      { success: false, message: "Sorry, service unavailable. We are trying to get it back up!" },
+      {
+        success: false,
+        message: "Sorry, service unavailable. We are trying to get it back up!",
+      },
       { status: 503 },
     );
   }

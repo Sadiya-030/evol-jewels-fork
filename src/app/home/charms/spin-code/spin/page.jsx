@@ -22,26 +22,12 @@ const page = async () => {
     console.log("Beans API not available:", error.message);
   }
 
-  // Default spin probability if API fails
-  let spinProbability = { data: { Spin_probability: 0.01 } };
-  try {
-    const spinres = await fetch(`${process.env.CMSURL}/api/spin`, {
-      cache: "no-store",
-      headers: getStrapiHeaders(),
-    });
-    if (spinres.ok) {
-      spinProbability = await spinres.json();
-    }
-  } catch (error) {
-    console.log("Spin probability API not available, using default");
-  }
+  // Get spin probability from env var (default 0.25 = 25%)
+  const spinProbability = parseFloat(process.env.SPIN_PROBABILITY) || 0.25;
 
   return (
     <div>
-      <SpinPage
-        charmsssr={RESULT.data || []}
-        Probability={spinProbability?.data?.Spin_probability || 0.01}
-      />
+      <SpinPage charmsssr={RESULT.data || []} Probability={spinProbability} />
     </div>
   );
 };

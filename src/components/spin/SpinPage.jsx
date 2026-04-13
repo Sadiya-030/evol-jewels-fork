@@ -7,7 +7,7 @@ import charms3 from "../../../public/charmsicons3.png";
 import { motion, AnimatePresence } from "framer-motion";
 import SpinSucess from "../../components/SpinSucess";
 import VideoLayer from "../../components/ui/VideoLayer";
-import { markCouponAsUsed, markSpinCouponAsUsed } from "../../utils/Apis";
+import { markSpinCouponAsUsed } from "../../utils/Apis";
 import { charmsCode } from "../../store/CharmsCode/charmsCode";
 import { useRouter } from "next/navigation";
 import NotificationModal from "../ui/NotificationModal";
@@ -31,6 +31,8 @@ const SpinPage = ({ charmsssr, Probability }) => {
   const [notifimodal, setnotifimodal] = useState(false);
   const [notifymsg, setnotifymsg] = useState("");
   const [isHydrated, setIsHydrated] = useState(false);
+  const [isPriorityUser, setIsPriorityUser] = useState(false);
+  const [wonBean, setWonBean] = useState(null);
 
   // Fallback images for charms
   const fallbackImages = [charms1.src, charms2.src, charms3.src];
@@ -88,7 +90,7 @@ const SpinPage = ({ charmsssr, Probability }) => {
     setIsHydrated(true);
   }, []);
 
-  // Check session only after hydration
+  // Check session and fetch spin config (priority user check)
   useEffect(() => {
     if (!isHydrated) return;
 
@@ -106,13 +108,35 @@ const SpinPage = ({ charmsssr, Probability }) => {
 
     if (!hasSession && !hasCharmsSize) {
       router.push("/home/charms");
+      return;
     }
-  }, [isHydrated, charmsSize]);
+
+    // Check if user is a priority user
+    const checkPriorityUser = async () => {
+      const phoneNumber = sessionStorage.getItem("userPhoneNumber");
+      if (!phoneNumber) return;
+
+      try {
+        const res = await fetch(
+          `/api/spin-config?phoneNumber=${encodeURIComponent(phoneNumber)}`,
+        );
+        if (res.ok) {
+          const data = await res.json();
+          setIsPriorityUser(data.isPriorityUser || false);
+        }
+      } catch (error) {
+        console.error("Error checking priority user:", error);
+      }
+    };
+
+    checkPriorityUser();
+  }, [isHydrated, charmsSize, router]);
 
   const segmentAngle = 360 / segments.length;
 
   const selectSegmentByProbability = () => {
-    const isWinner = Math.random() < WIN_PROBABILITY;
+    // Priority users always win (but we don't change the probability, just the outcome)
+    const isWinner = isPriorityUser || Math.random() < WIN_PROBABILITY;
 
     const pool = isWinner ? winSegments : loseSegments;
 
@@ -174,6 +198,9 @@ const SpinPage = ({ charmsssr, Probability }) => {
 
     // Legacy coupon-based flow
     const sesId = sessionStorage.getItem("charmSessionId");
+    if (!spinresult) return;
+
+    // Handle loss
     if (spinresult?.isWin === false) {
       const data2 = await markSpinCouponAsUsed(sesId);
       if (data2?.success === false) {
@@ -189,25 +216,38 @@ const SpinPage = ({ charmsssr, Probability }) => {
       return;
     }
 
-    const data = await markCouponAsUsed(
-      charmsSize,
-      true,
-      0.5,
-      spinresult?.label,
-      sesId,
-    );
-    if (data?.success === false) {
-      setnotifymsg(data?.error);
-      setnotifimodal(true);
-      // setisSucesssSpin(false);
-      // setsucessModal(true);
+    // Handle win - vend max available bean
+    try {
+      const vendRes = await fetch("/api/spin-vend", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId: sesId }),
+      });
+
+      const vendData = await vendRes.json();
+
+      if (vendData?.success === false) {
+        setnotifymsg(vendData?.error || "Failed to vend charm");
+        setnotifimodal(true);
+        setCharmsSize(null);
+        return;
+      }
+
+      // Store won bean info for success modal
+      if (vendData?.wonBean) {
+        setWonBean(vendData.wonBean);
+      }
+
+      sessionStorage.removeItem("charmSessionId");
+      setisSucesssSpin(true);
+      setsucessModal(true);
       setCharmsSize(null);
-      return;
+    } catch (error) {
+      console.error("Error vending charm:", error);
+      setnotifymsg("Failed to vend charm");
+      setnotifimodal(true);
+      setCharmsSize(null);
     }
-    sessionStorage.removeItem("charmSessionId");
-    setisSucesssSpin(true);
-    setsucessModal(true);
-    setCharmsSize(null);
   };
 
   const spinWheel = () => {
@@ -276,6 +316,7 @@ const SpinPage = ({ charmsssr, Probability }) => {
         isOpen={sucessModal}
         setIsOpen={setsucessModal}
         isSucess={issuccessspin}
+        wonBean={wonBean}
       ></SpinSucess>
 
       {/* Foreground content */}
@@ -363,6 +404,15 @@ const SpinPage = ({ charmsssr, Probability }) => {
                       y2="0"
                       gradientUnits="userSpaceOnUse"
                     >
+                      <stop stopColor="#FFA347" />
+                      <stop offset="0.13" stopColor="#FFE2AF" />
+                      <stop offset="0.16" stopColor="#E9C694" />
+                      <stop offset="0.22" stopColor="#B0814F" />
+                      <stop offset="0.28" stopColor="#703200" />
+                      <stop offset="0.49" stopColor="#FFF0CE" />
+                      <stop offset="0.61" stopColor="#FFBB57" />
+                      <stop offset="0.83" stopColor="#562C02" />
+                      <stop offset="1" stopColor="#FFE2AF" />
                       <stop stopColor="#FFA347" />
                       <stop offset="0.13" stopColor="#FFE2AF" />
                       <stop offset="0.16" stopColor="#E9C694" />

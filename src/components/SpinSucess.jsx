@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-const SpinSucess = ({ isOpen, setIsOpen, isSucess }) => {
+const SpinSucess = ({ isOpen, setIsOpen, isSucess, wonBean }) => {
   const router = useRouter();
   return (
     <AnimatePresence>
@@ -35,17 +35,31 @@ const SpinSucess = ({ isOpen, setIsOpen, isSucess }) => {
             {isSucess ? (
               <div className=" w-full px-[67px]">
                 <div className=" bg-white h-[191px] overflow-hidden mb-[55px] mx-auto w-[191px] flex items-center justify-center">
-                  <img
-                    src="https://images.unsplash.com/photo-1513885535751-8b9238bd345a?w=400&q=80"
-                    alt="Success"
-                    className=" w-auto mx-auto h-[191px] object-cover rounded-full"
-                  />
+                  {wonBean?.image ? (
+                    <img
+                      src={wonBean.image}
+                      alt={wonBean.title || "Bean"}
+                      className=" w-auto mx-auto h-[191px] object-cover rounded-full"
+                    />
+                  ) : (
+                    <img
+                      src="https://images.unsplash.com/photo-1513885535751-8b9238bd345a?w=400&q=80"
+                      alt="Success"
+                      className=" w-auto mx-auto h-[191px] object-cover rounded-full"
+                    />
+                  )}
                 </div>
                 <p className=" text-black text-center text-[58px] leading-[68px]">
+<<<<<<< HEAD
                   You Won a Real Gold Bean!{" "}
+=======
+                  {wonBean
+                    ? `You've got ${wonBean.grams}gms ${wonBean.title} Bean!`
+                    : "You Won a Real Gold Charm!"}
+>>>>>>> 2b21dab (feat: continue issue #11 vend max bean flow)
                 </p>
                 <p className=" text-[30px] mt-[24px] mb-[55px] text-black leading-[54px]">
-                  That’s some amazing luck! A tiny token of real gold is now
+                  That's some amazing luck! A tiny token of real gold is now
                   yours.
                 </p>
                 <Link
