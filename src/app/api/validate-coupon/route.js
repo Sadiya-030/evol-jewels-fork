@@ -1,6 +1,11 @@
 import { saveSession } from "../../lib/session";
 import { v4 as uuid } from "uuid";
 
+const getStrapiHeaders = () => ({
+  "Content-Type": "application/json",
+  Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
+});
+
 export async function POST(req) {
   const { code, isSpinPage } = await req.json();
   console.log(code, isSpinPage);
@@ -13,6 +18,7 @@ export async function POST(req) {
   try {
     res = await fetch(apiUrl, {
       cache: "no-store",
+      headers: getStrapiHeaders(),
     });
   } catch (error) {
     console.error("Strapi fetch failed:", error);

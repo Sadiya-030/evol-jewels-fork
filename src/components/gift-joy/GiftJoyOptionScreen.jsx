@@ -7,7 +7,9 @@ import VideoLayer from "../ui/VideoLayer";
 const GiftJoyOptionScreen = ({ setPageState }) => {
   return (
     <div className="relative w-full h-full">
-      <VideoLayer src="https://ts-bucket.mum-objectstore.e2enetworks.net/evol_4b2a7deae5.mp4" />
+      <div className="w-full h-screen z-0 absolute top-0 left-0">
+        <div className="absolute top-0 left-0 h-screen z-[1] w-full bg-blue-950/80"></div>
+      </div>
       <div className="relative z-50 min-h-screen">
         {/* Header */}
         <div className="h-[103px] bg-gray-300/20 flex justify-between items-center px-[50px] w-full">

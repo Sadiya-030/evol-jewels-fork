@@ -53,7 +53,7 @@ const GiftJoyScreen = ({ setPageState }) => {
       if (!showKeyboard) return;
       const target = event.target;
       if (target.closest('[data-keyboard="true"]')) return;
-      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') return;
+      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return;
       setShowKeyboard(false);
     };
 
@@ -65,9 +65,21 @@ const GiftJoyScreen = ({ setPageState }) => {
     document.addEventListener("pointerdown", handleClickOutside, eventOptions);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside, eventOptions);
-      document.removeEventListener("touchstart", handleClickOutside, eventOptions);
-      document.removeEventListener("pointerdown", handleClickOutside, eventOptions);
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside,
+        eventOptions,
+      );
+      document.removeEventListener(
+        "touchstart",
+        handleClickOutside,
+        eventOptions,
+      );
+      document.removeEventListener(
+        "pointerdown",
+        handleClickOutside,
+        eventOptions,
+      );
     };
   }, [showKeyboard]);
 
@@ -77,7 +89,7 @@ const GiftJoyScreen = ({ setPageState }) => {
     options.some((item) => item.label.toLowerCase().includes("under"));
 
   const isoccasion = options.some((item) =>
-    item.label.toLowerCase().includes("birthday")
+    item.label.toLowerCase().includes("birthday"),
   );
   const ismultipleSelect =
     options.some((item) => item.label.toLowerCase().includes("rings")) ||
@@ -184,17 +196,17 @@ const GiftJoyScreen = ({ setPageState }) => {
     const isEngagement = history.some(
       (item) =>
         item.role === "user" &&
-        item.content.toLowerCase().includes("engagement")
+        item.content.toLowerCase().includes("engagement"),
     );
 
     try {
       const response = await fetch(
-        "https://evol.thumbstack.dev/api/products/search",
+        `${process.env.NEXT_PUBLIC_CMSURL}/api/products/search`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ query: tagString, topK: 21 }),
-        }
+        },
       );
 
       const data = await response.json();
@@ -208,7 +220,7 @@ const GiftJoyScreen = ({ setPageState }) => {
         if (isEngagement || data?.products?.length < 10) {
           const onlyRings = data.products?.filter(
             (item) =>
-              item?.pineconeMetadata?.productType?.toLowerCase() === "rings"
+              item?.pineconeMetadata?.productType?.toLowerCase() === "rings",
           );
           const PrdData = isEngagement ? onlyRings : data.products;
           setBrowseProducts(PrdData);
@@ -395,6 +407,9 @@ const GiftJoyScreen = ({ setPageState }) => {
   const [IsExitModal, setIsExitModal] = useState(false);
   return (
     <div className="relative w-full h-full">
+      <div className="w-full h-screen z-0 absolute top-0 left-0">
+        <div className="absolute top-0 left-0 h-screen z-[1] w-full bg-blue-950/80"></div>
+      </div>
       <ExitModal isOpen={IsExitModal} onClose={() => setIsExitModal(false)} />
       <QueModal
         isOpen={quemodalState}
@@ -423,9 +438,6 @@ const GiftJoyScreen = ({ setPageState }) => {
         data={qaList}
         onEdit={handleEdit}
       />
-
-      {/* BG video */}
-      <VideoLayer src="https://ts-bucket.mum-objectstore.e2enetworks.net/evol_4b2a7deae5.mp4" />
 
       <div className="relative min-h-screen z-50">
         {/* Header */}

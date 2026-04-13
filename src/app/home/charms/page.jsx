@@ -7,18 +7,11 @@ const page = () => {
   return (
     <div className=" relative  w-full h-screen">
       <div className=" w-full h-screen z-0 absolute top-0 left-0">
-        <video
-          src="https://ts-bucket.mum-objectstore.e2enetworks.net/evol_4b2a7deae5.mp4"
-          loop
-          autoPlay
-          muted
-          className=" w-full h-full object-cover"
-        ></video>
         <div className="  absolute h-full w-full top-0 left-0 z-10 bg-blue-950/85"></div>
       </div>
       <div className=" relative    z-50">
         <div className=" h-[103px]  bg-gray-100/10  flex justify-between items-center px-[50px] w-full ">
-          <p className=" text-white text-[30px]">Charms</p>
+          <p className=" text-white text-[30px]">Beans</p>
           <Link
             href="/home"
             className="border-[2.207px]  border-[#ffffffc8] rounded-md h-fit w-fit grid place-content-center"
@@ -68,7 +61,7 @@ const page = () => {
           </span>
         </p>
         <p className=" text-[44px] font-ethereal leading-[88px] max-w-[656px] mx-auto text-white text-center">
-          Discover different ways to get your gold charm
+          Discover different ways to get your gold beans
         </p>
         <CardSlider2 />
       </div>

@@ -1,13 +1,14 @@
-// fetchCharms.js
+// fetchCoupons.js
 
 export const FetchCupons = async () => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_CMSURL}/api/coupons`, {
+    const res = await fetch(`${process.env.CMSURL}/api/coupons`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
       },
-      cache: "no-store", // or "force-cache" if needed
+      cache: "no-store",
     });
 
     if (!res.ok) {

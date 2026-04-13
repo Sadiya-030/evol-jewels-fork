@@ -1,28 +1,33 @@
 import SpinPage from "../../../../../components/spin/SpinPage";
 import React from "react";
 
+const getStrapiHeaders = () => ({
+  "Content-Type": "application/json",
+  Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
+});
+
 const page = async () => {
-  // Fetch charms with lower grams (1-2g) for spin wheel prizes
   let RESULT = { data: [] };
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_CMSURL}/api/charms?filters[grams][$lte]=2&populate=image&pagination[limit]=4`,
-      { cache: "no-store" },
+      `${process.env.CMSURL}/api/charms?filters[grams][$lte]=0.5&populate=image&pagination[limit]=4`,
+      { cache: "no-store", headers: getStrapiHeaders() },
     );
     if (res.ok) {
       RESULT = await res.json();
     } else {
-      console.log("Charms API error:", res.status);
+      console.log("Beans API error:", res.status);
     }
   } catch (error) {
-    console.log("Charms API not available:", error.message);
+    console.log("Beans API not available:", error.message);
   }
 
   // Default spin probability if API fails
-  let spinProbability = { data: { Spin_probability: 0.25 } };
+  let spinProbability = { data: { Spin_probability: 0.01 } };
   try {
     const spinres = await fetch(`${process.env.CMSURL}/api/spin`, {
       cache: "no-store",
+      headers: getStrapiHeaders(),
     });
     if (spinres.ok) {
       spinProbability = await spinres.json();
@@ -35,7 +40,7 @@ const page = async () => {
     <div>
       <SpinPage
         charmsssr={RESULT.data || []}
-        Probability={spinProbability?.data?.Spin_probability || 0.25}
+        Probability={spinProbability?.data?.Spin_probability || 0.01}
       />
     </div>
   );

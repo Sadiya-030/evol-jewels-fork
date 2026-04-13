@@ -97,7 +97,7 @@ const Experience = ({
 
   const layout = useMemo(
     () => makeHoneycomb(charms.length, 80, 320),
-    [charms.length]
+    [charms.length],
   );
   const focusItem = (pos, id) => {
     setFocusedId(id);
@@ -158,7 +158,7 @@ const Experience = ({
         spinFlow,
         datacharm?.weight,
         datacharm?.title,
-        sesId
+        sesId,
       );
 
       if (data?.success === false) {
@@ -246,7 +246,7 @@ const Experience = ({
     ${isVending ? "bg-gray-400 cursor-not-allowed" : "bg-blue-200"}
   `}
           >
-            {isVending ? "Vending..." : "Select Charm"}
+            {isVending ? "Vending..." : "Claim Bean"}
           </div>
         </div>
       )}

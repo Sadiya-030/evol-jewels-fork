@@ -188,13 +188,6 @@ const CharmsCodePage = ({ link }) => {
         onClose={() => isNotificaton(false)}
       />
       <div className="w-full h-screen absolute top-0 left-0 z-0">
-        <video
-          src="https://ts-bucket.mum-objectstore.e2enetworks.net/evol_4b2a7deae5.mp4"
-          loop
-          autoPlay
-          muted
-          className="w-full h-full object-cover"
-        ></video>
         {/* gradient overlay */}
         <div className="absolute inset-0 bg-blue-950/85"></div>
       </div>
@@ -210,7 +203,7 @@ const CharmsCodePage = ({ link }) => {
             <ArrowLeft size={32} className="text-white" />
             Back
           </Link>
-          <p className="text-white text-[30px]">Charms</p>
+          <p className="text-white text-[30px]">Beans</p>
           <Link
             href="/home"
             className="rounded-md border-[2.207px] text-xl text-white border-[#FFFFFF66] px-3 py-2 grid place-content-center"
@@ -231,7 +224,7 @@ const CharmsCodePage = ({ link }) => {
                     <motion.img
                       key={currentIndex}
                       src={charms[currentIndex].src}
-                      alt="Charms"
+                      alt="Beans"
                       className="h-full w-full object-contain"
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -245,7 +238,7 @@ const CharmsCodePage = ({ link }) => {
                 Have a Code? Let’s Check it．
               </p>
               <p className=" text-[26px] leading-14 text-[#F4EFEF]">
-                Enter your code below to see if you’ve unlocked a gold charm.
+                Enter your code below to see if you’ve unlocked a gold bean.
               </p>
             </div>
             <div className=" w-full mb-16">

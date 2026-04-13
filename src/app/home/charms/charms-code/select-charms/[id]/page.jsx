@@ -44,10 +44,11 @@ const Page = () => {
   };
   const charms = createCharms();
   const selectedCharms = charms?.filter(
-    (item) => item?.title === decodeURI(id) && item?.weight === charmsSize?.gold
+    (item) =>
+      item?.title === decodeURI(id) && item?.weight === charmsSize?.gold,
   )[0];
   const selectedAllCharms = charms.filter(
-    (item) => item.weight === selectedCharms?.weight
+    (item) => item.weight === selectedCharms?.weight,
   );
   const [isVending, setIsVending] = useState(false);
 
@@ -97,16 +98,25 @@ const Page = () => {
         false,
         selectedCharms?.weight,
         selectedCharms?.title,
-        sesId
+        sesId,
       );
 
       if (data?.success === false) {
-        setmodalmsg(data.error || "Something went wrong");
+        setmodalmsg(data.error || data.message || "Something went wrong");
         setIsOpen(true);
         return;
       }
 
-      // ✅ success
+      // Check if vending machine had issues
+      if (data?.vendingMachineError) {
+        sessionStorage.removeItem("charmSessionId");
+        setCharmsSize(null);
+        setmodalmsg(data.message);
+        setIsOpen(true);
+        return;
+      }
+
+      // ✅ Full success
       sessionStorage.removeItem("charmSessionId");
       setCharmsSize(null);
       setmodalmsg("");
@@ -128,16 +138,6 @@ const Page = () => {
         onClose={() => setIsOpen(false)}
       />
       ;{" "}
-      <div className="w-full h-screen absolute top-0 left-0 z-0">
-        <video
-          src="https://ts-bucket.mum-objectstore.e2enetworks.net/7946210_hd_720_1366_30fps_3_c58042e06d.mp4"
-          loop
-          autoPlay
-          muted
-          className="w-full h-full object-cover"
-        ></video>
-        <div className=" absolute top-0 left-0 h-screen z-[1] w-full bg-white/80"></div>
-      </div>
       {/* main content */}
       <div className="relative z-50 w-full h-full">
         {/* header */}
@@ -149,7 +149,7 @@ const Page = () => {
             <ArrowLeft size={32} className="text-gray-800" />
             Back
           </Link>
-          <p className="text-gray-800 text-[30px] font-medium">Charms</p>
+          <p className="text-gray-800 text-[30px] font-medium">Beans</p>
           <Link
             href="/home"
             className="rounded-md border-[2px] text-xl text-gray-800 border-gray-300 bg-gray-100 px-4 py-2 grid place-content-center hover:bg-gray-200 transition-colors"
@@ -196,7 +196,7 @@ const Page = () => {
       }
     `}
                 >
-                  {isVending ? "Vending..." : "Select Charm"}
+                  {isVending ? "Vending..." : "Claim Bean"}
                 </div>
               </div>
             </div>

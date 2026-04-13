@@ -28,7 +28,7 @@ const GiftJoyScreenV2 = ({ setPageState }) => {
       if (!showKeyboard) return;
       const target = event.target;
       if (target.closest('[data-keyboard="true"]')) return;
-      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') return;
+      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return;
       setShowKeyboard(false);
     };
 
@@ -40,9 +40,21 @@ const GiftJoyScreenV2 = ({ setPageState }) => {
     document.addEventListener("pointerdown", handleClickOutside, eventOptions);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside, eventOptions);
-      document.removeEventListener("touchstart", handleClickOutside, eventOptions);
-      document.removeEventListener("pointerdown", handleClickOutside, eventOptions);
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside,
+        eventOptions,
+      );
+      document.removeEventListener(
+        "touchstart",
+        handleClickOutside,
+        eventOptions,
+      );
+      document.removeEventListener(
+        "pointerdown",
+        handleClickOutside,
+        eventOptions,
+      );
     };
   }, [showKeyboard]);
 
@@ -106,7 +118,7 @@ const GiftJoyScreenV2 = ({ setPageState }) => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        "https://evol.thumbstack.dev/api/products/search",
+        `${process.env.NEXT_PUBLIC_CMSURL}/api/products/search`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -115,7 +127,7 @@ const GiftJoyScreenV2 = ({ setPageState }) => {
             topK: 21,
             sentence: true,
           }),
-        }
+        },
       );
 
       const data = await response.json();
@@ -147,6 +159,9 @@ const GiftJoyScreenV2 = ({ setPageState }) => {
   };
   return (
     <div className="relative w-full h-full">
+      <div className="w-full h-screen z-0 absolute top-0 left-0">
+        <div className="absolute top-0 left-0 h-screen z-[1] w-full bg-blue-950/80"></div>
+      </div>
       {/* Product loading layer */}
       <AnimatePresence>
         {isLoading && (
@@ -161,9 +176,6 @@ const GiftJoyScreenV2 = ({ setPageState }) => {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* BG video */}
-      <VideoLayer src="https://ts-bucket.mum-objectstore.e2enetworks.net/evol_4b2a7deae5.mp4" />
 
       <div className="relative z-50">
         {/* Header */}
@@ -234,8 +246,8 @@ const GiftJoyScreenV2 = ({ setPageState }) => {
                 isRecording
                   ? "Listening..."
                   : isTranscribing
-                  ? "Transcribing..."
-                  : "E.g. \"I'm looking for a gold ring for my daughter's engagement\""
+                    ? "Transcribing..."
+                    : "E.g. \"I'm looking for a gold ring for my daughter's engagement\""
               }
             />
 
@@ -251,8 +263,8 @@ const GiftJoyScreenV2 = ({ setPageState }) => {
       isTranscribing
         ? "bg-gray-500 cursor-not-allowed"
         : isRecording
-        ? "bg-red-500/80"
-        : "bg-blue-800"
+          ? "bg-red-500/80"
+          : "bg-blue-800"
     }
   `}
             >

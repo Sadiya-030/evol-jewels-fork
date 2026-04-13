@@ -42,7 +42,7 @@ const SpinSucess = ({ isOpen, setIsOpen, isSucess }) => {
                   />
                 </div>
                 <p className=" text-black text-center text-[58px] leading-[68px]">
-                  You Won a Real Gold Charm!{" "}
+                  You Won a Real Gold Bean!{" "}
                 </p>
                 <p className=" text-[30px] mt-[24px] mb-[55px] text-black leading-[54px]">
                   That’s some amazing luck! A tiny token of real gold is now
@@ -78,7 +78,7 @@ const SpinSucess = ({ isOpen, setIsOpen, isSucess }) => {
                   onClick={() => setIsOpen(false)}
                   className="text-white text-[30px] leading-[54px] rounded-[200px] h-[100px] flex items-center justify-center w-full bg-[#002066]"
                 >
-                  Continue with Charms Code
+                  Continue with Beans Code
                 </Link>
               </div>
             )}

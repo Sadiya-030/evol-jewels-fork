@@ -1,16 +1,16 @@
 const gemstoneImages = {
   garnet: "https://images.unsplash.com/photo-1551122089-4e3e72477432?w=400&q=80",
   amethyst: "https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?w=400&q=80",
-  aquamarine: "https://images.unsplash.com/photo-1583937443566-6b087e0f78c8?w=400&q=80",
-  diamond: "https://images.unsplash.com/photo-1586104237516-5765cf54e56a?w=400&q=80",
-  emerald: "https://images.unsplash.com/photo-1574948495680-f13dc97c0964?w=400&q=80",
-  pearl: "https://images.unsplash.com/photo-1591209627710-d2427a93a890?w=400&q=80",
+  aquamarine: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&q=80",
+  diamond: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400&q=80",
+  emerald: "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=400&q=80",
+  pearl: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&q=80",
   ruby: "https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?w=400&q=80",
-  sapphire: "https://images.unsplash.com/photo-1615655114865-4cc1fda5c6e9?w=400&q=80",
+  sapphire: "https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=400&q=80",
   opal: "https://images.unsplash.com/photo-1602751584552-8ba73aad10e1?w=400&q=80",
-  topaz: "https://images.unsplash.com/photo-1583937443566-6b087e0f78c8?w=400&q=80",
+  topaz: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&q=80",
   turquoise: "https://images.unsplash.com/photo-1596944924616-7b38e7cfac36?w=400&q=80",
-  agate: "https://images.unsplash.com/photo-1615655114865-4cc1fda5c6e9?w=400&q=80",
+  agate: "https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=400&q=80",
 };
 
 const sunSignData = {

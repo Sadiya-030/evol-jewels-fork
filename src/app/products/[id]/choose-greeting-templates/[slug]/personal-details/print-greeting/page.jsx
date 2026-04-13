@@ -13,11 +13,9 @@ const page = () => {
   const [isOpen, setisOpen] = useState();
   const [editTemp, seteditTemp] = useState(false);
   const pathname = usePathname();
-  const parts2 = pathname.split("/").filter(Boolean);
-  const last2 = parts2[0];
-  const secondLast2 = parts2[1];
-  const str = window.location.href;
-  const parts = str.split("/").filter(Boolean); // ["sdf", "sdfs", "sdfsf", "sdfsdf"]
+  const parts = pathname.split("/").filter(Boolean);
+  const last2 = parts[0];
+  const secondLast2 = parts[1];
   const secondLast = parts[parts.length - 2];
   const { product, selectedCard } = useGreetingStore();
   const router = useRouter();
@@ -31,16 +29,6 @@ const page = () => {
   };
   return (
     <div className="min-h-screen bg-slate-50">
-      <div className=" w-full h-screen z-0 absolute top-0 left-0">
-        <video
-          src="https://ts-bucket.mum-objectstore.e2enetworks.net/7946210_hd_720_1366_30fps_3_c58042e06d.mp4"
-          loop
-          autoPlay
-          muted
-          className=" w-full h-full object-cover"
-        ></video>
-        <div className=" absolute top-0 left-0 h-screen z-[1] w-full bg-white/80"></div>
-      </div>
       <div className="  relative z-20">
         <div className=" h-[137px] border-b border-[#CECECE] w-full flex items-center justify-between px-[50px]">
           <p className=" text-4xl  text-black">Gift a Moment</p>

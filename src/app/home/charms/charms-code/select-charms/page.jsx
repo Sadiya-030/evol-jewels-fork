@@ -61,7 +61,7 @@ function PageContent() {
 
     // 1️⃣ Filter by gold size (number-safe)
     const filtered = AllCharms.filter(
-      (charm) => Number(charm?.grams) === Number(goldSize)
+      (charm) => Number(charm?.grams) === Number(goldSize),
     );
 
     if (!filtered.length) return [];
@@ -92,7 +92,7 @@ function PageContent() {
   const charms = createCharms();
 
   const filteredCharms = charms.filter(
-    (item) => item.weight === selectedWeight
+    (item) => item.weight === selectedWeight,
   );
 
   const [isOpen, setIsOpen] = useState(false);
@@ -106,16 +106,6 @@ function PageContent() {
         onClose={() => setIsOpen(false)}
       />
       ;{" "}
-      <div className="w-full h-screen absolute top-0 left-0 z-0">
-        <video
-          src="https://ts-bucket.mum-objectstore.e2enetworks.net/7946210_hd_720_1366_30fps_3_c58042e06d.mp4"
-          loop
-          autoPlay
-          muted
-          className="w-full h-full object-cover"
-        ></video>
-        <div className=" absolute top-0 left-0 h-screen z-[1] w-full bg-white/90"></div>
-      </div>
       {/* main content */}
       <div className="relative z-50 w-full h-full">
         {/* header */}
@@ -127,7 +117,7 @@ function PageContent() {
             <ArrowLeft size={32} className="text-gray-800" />
             Back
           </Link>
-          <p className="text-gray-800 text-[30px] font-medium">Charms</p>
+          <p className="text-gray-800 text-[30px] font-medium">Beans</p>
           <Link
             onClick={() => setCharmsSize(null)}
             href="/home"
@@ -145,7 +135,7 @@ function PageContent() {
                 handleViewChange(
                   activeView === "Experience View"
                     ? "Grid View"
-                    : "Experience View"
+                    : "Experience View",
                 )
               }
               className={`flex items-center h-20 justify-center w-[85px] bg-white transition-colors`}
@@ -270,8 +260,8 @@ function PageContent() {
           !isDisabled
             ? "cursor-not-allowed bg-gray-500 opacity-40 text-black"
             : !isSelected
-            ? "bg-black text-white cursor-pointer"
-            : "bg-transparent text-black opacity-70 cursor-pointer"
+              ? "bg-black text-white cursor-pointer"
+              : "bg-transparent text-black opacity-70 cursor-pointer"
         }
       `}
                       >

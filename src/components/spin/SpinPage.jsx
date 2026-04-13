@@ -44,7 +44,7 @@ const SpinPage = ({ charmsssr, Probability }) => {
       weight: 0.5,
       probability: 0.08,
     },
-    { id: 2, emoji: "", label: "", isWin: false, probability: 0.25 },
+    { id: 2, emoji: "", label: "", isWin: false, probability: 0.01 },
     {
       id: 3,
       emoji: charmsData[1]?.image?.url || fallbackImages[1],
@@ -53,7 +53,7 @@ const SpinPage = ({ charmsssr, Probability }) => {
       weight: 0.5,
       probability: 0.08,
     },
-    { id: 4, emoji: "", label: "", isWin: false, probability: 0.25 },
+    { id: 4, emoji: "", label: "", isWin: false, probability: 0.01 },
     {
       id: 5,
       emoji: charmsData[2]?.image?.url || fallbackImages[2],
@@ -145,7 +145,11 @@ const SpinPage = ({ charmsssr, Probability }) => {
       // Decrement spin count
       const decrementResult = await decrementUserSpin();
       if (decrementResult?.success === false) {
-        setnotifymsg(decrementResult?.message || decrementResult?.error || "Failed to record spin");
+        setnotifymsg(
+          decrementResult?.message ||
+            decrementResult?.error ||
+            "Failed to record spin",
+        );
         setnotifimodal(true);
         return;
       }
@@ -182,7 +186,7 @@ const SpinPage = ({ charmsssr, Probability }) => {
       true,
       0.5,
       spinresult?.label,
-      sesId
+      sesId,
     );
     if (data?.success === false) {
       setnotifymsg(data?.error);
@@ -251,12 +255,9 @@ const SpinPage = ({ charmsssr, Probability }) => {
 
   return (
     <div className="relative w-full h-screen">
-      {/* Background video */}
-      <VideoLayer
-        src={
-          "https://ts-bucket.mum-objectstore.e2enetworks.net/evol_4b2a7deae5.mp4"
-        }
-      />
+      <div className="w-full h-screen z-0 absolute top-0 left-0">
+        <div className="absolute top-0 left-0 h-screen z-[1] w-full bg-blue-950/80"></div>
+      </div>
       <NotificationModal
         msg={notifymsg}
         isOpen={notifimodal}
@@ -280,7 +281,7 @@ const SpinPage = ({ charmsssr, Probability }) => {
             <ArrowLeft size={32} className="text-white" />
             Back
           </button>
-          <p className="text-white text-[30px]">Charms</p>
+          <p className="text-white text-[30px]">Beans</p>
           <Link
             href="/home"
             className="rounded-md border-[2.207px] text-xl text-white border-[#FFFFFF66] px-3 py-2 grid place-content-center"
@@ -292,41 +293,41 @@ const SpinPage = ({ charmsssr, Probability }) => {
         {/* Input area */}
         <div className="px-[100px] h-fit flex-col flex items-start mt-[40px]">
           <div className=" w-full h-fit mt-[65px] mb-12">
-          <div className=" flex flex-col justify-center items-center w-full mb-[58px]">
-            <div className=" h-[224px] w-[224px] rounded-full border-2 border-gray-500 mb-[77px] p-[22px]">
-              <div className=" bg-white h-full rounded-full p-7 flex items-center justify-center text-black w-full">
-                <AnimatePresence mode="wait">
-                  <motion.img
-                    key={currentIndex}
-                    src={charms[currentIndex].src}
-                    alt="Charms"
-                    className="h-full w-full object-contain"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 1.1 }}
-                    transition={{ duration: 0.6, ease: "easeInOut" }}
-                  />
-                </AnimatePresence>
+            <div className=" flex flex-col justify-center items-center w-full mb-[58px]">
+              <div className=" h-[224px] w-[224px] rounded-full border-2 border-gray-500 mb-[77px] p-[22px]">
+                <div className=" bg-white h-full rounded-full p-7 flex items-center justify-center text-black w-full">
+                  <AnimatePresence mode="wait">
+                    <motion.img
+                      key={currentIndex}
+                      src={charms[currentIndex].src}
+                      alt="Beans"
+                      className="h-full w-full object-contain"
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 1.1 }}
+                      transition={{ duration: 0.6, ease: "easeInOut" }}
+                    />
+                  </AnimatePresence>
+                </div>
+              </div>
+              <p className=" text-[50px] font-ethereal text-center text-white mb-[26px] leading-[80px]">
+                Try Your Luck!
+              </p>
+              <p className=" text-[26px] leading-[56px] text-[#F4EFEF]">
+                One Week. One Spin. Unlock Your Charm!
+              </p>
+            </div>
+            <div className=" w-full flex items-start  h-[300px] ">
+              <div
+                onClick={spinWheel}
+                // 'disabled' here doesn’t affect div, keeping as-is to not change your logic
+                disabled={isSpinning}
+                className=" bg-white font-ethereal text-[30px] h-[106px] text-center text-black   flex items-center justify-center w-full rounded-full"
+              >
+                Spin Now
               </div>
             </div>
-            <p className=" text-[50px] font-ethereal text-center text-white mb-[26px] leading-[80px]">
-              Try Your Luck!
-            </p>
-            <p className=" text-[26px] leading-[56px] text-[#F4EFEF]">
-              One Week. One Spin. Unlock Your Charm!
-            </p>
           </div>
-          <div className=" w-full flex items-start  h-[300px] ">
-            <div
-              onClick={spinWheel}
-              // 'disabled' here doesn’t affect div, keeping as-is to not change your logic
-              disabled={isSpinning}
-              className=" bg-white font-ethereal text-[30px] h-[106px] text-center text-black   flex items-center justify-center w-full rounded-full"
-            >
-              Spin Now
-            </div>
-          </div>
-        </div>
         </div>
 
         {/* spin */}

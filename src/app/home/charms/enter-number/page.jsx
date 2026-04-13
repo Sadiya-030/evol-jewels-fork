@@ -70,7 +70,7 @@ const Page = () => {
       if (!isKeyboardOpen) return;
       const target = event.target;
       if (target.closest('[data-keyboard="true"]')) return;
-      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') return;
+      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return;
       setIsKeyboardOpen(false);
     };
 
@@ -82,9 +82,21 @@ const Page = () => {
     document.addEventListener("pointerdown", handleClickOutside, eventOptions);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside, eventOptions);
-      document.removeEventListener("touchstart", handleClickOutside, eventOptions);
-      document.removeEventListener("pointerdown", handleClickOutside, eventOptions);
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside,
+        eventOptions,
+      );
+      document.removeEventListener(
+        "touchstart",
+        handleClickOutside,
+        eventOptions,
+      );
+      document.removeEventListener(
+        "pointerdown",
+        handleClickOutside,
+        eventOptions,
+      );
     };
   }, [isKeyboardOpen]);
 
@@ -99,7 +111,7 @@ const Page = () => {
       setIsCaps((prev) => !prev);
     } else {
       setInputValue(
-        (prev) => prev + (isCaps ? key.toUpperCase() : key.toLowerCase())
+        (prev) => prev + (isCaps ? key.toUpperCase() : key.toLowerCase()),
       );
     }
   };
@@ -113,17 +125,9 @@ const Page = () => {
 
   return (
     <div className="relative w-full h-screen">
-      {/* Background video */}
-      <div className="w-full h-screen absolute top-0 left-0 z-0">
-        <video
-          src="https://ts-bucket.mum-objectstore.e2enetworks.net/evol_4b2a7deae5.mp4"
-          loop
-          autoPlay
-          muted
-          className="w-full h-full object-cover"
-        ></video>
-        {/* gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+      {/* Background */}
+      <div className="w-full h-screen z-0 absolute top-0 left-0">
+        <div className="absolute top-0 left-0 h-screen z-[1] w-full bg-blue-950/80"></div>
       </div>
 
       {/* Foreground content */}
@@ -137,7 +141,7 @@ const Page = () => {
             <ArrowLeft size={32} className="text-white" />
             Back
           </Link>
-          <p className="text-white text-[30px]">Charms</p>
+          <p className="text-white text-[30px]">Beans</p>
           <Link
             href="/home"
             className="rounded-md border-[2.207px] text-xl text-white border-[#FFFFFF66] px-3 py-2 grid place-content-center"
@@ -164,7 +168,7 @@ const Page = () => {
                   <motion.img
                     key={currentIndex}
                     src={charms[currentIndex].src}
-                    alt="Charms"
+                    alt="Beans"
                     className="h-full w-full object-contain"
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -221,7 +225,11 @@ const Page = () => {
               className="border-t border-white/20 bg-gray-200/20 backdrop-blur-md py-8 h-fit pb-[180px] flex flex-col gap-4 items-center justify-start pt-[89px] px-[100px]"
             >
               {rows.map((row, rowIndex) => (
-                <div key={rowIndex} className="flex gap-3 justify-center" data-keyboard="true">
+                <div
+                  key={rowIndex}
+                  className="flex gap-3 justify-center"
+                  data-keyboard="true"
+                >
                   {row.map((key) => (
                     <KeyboardKey
                       key={key}
@@ -233,8 +241,8 @@ const Page = () => {
                             ? ""
                             : "bg-[#FFFFFF25] mr-10 px-5"
                           : key === "Back"
-                          ? " ml-10 px-5 hover:bg-red-300/80 text-black"
-                          : ""
+                            ? " ml-10 px-5 hover:bg-red-300/80 text-black"
+                            : ""
                       }
                     />
                   ))}

@@ -25,12 +25,12 @@ export default function ProductsPage() {
     setisLoading(true);
     try {
       const response = await fetch(
-        "https://evol.thumbstack.dev/api/products/search",
+        `${process.env.NEXT_PUBLIC_CMSURL}/api/products/search`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ query: tagString, topK: 36 }),
-        }
+        },
       );
 
       const data = await response.json();
@@ -67,17 +67,6 @@ export default function ProductsPage() {
   const [modalProdData, setmodalProdData] = useState([]);
   return (
     <div className="min-h-screen">
-      <div className=" w-full h-screen z-0 absolute top-0 left-0">
-        <video
-          src="https://ts-bucket.mum-objectstore.e2enetworks.net/7946210_hd_720_1366_30fps_3_c58042e06d.mp4"
-          loop
-          autoPlay
-          muted
-          className=" w-full h-full object-cover"
-        ></video>
-        <div className=" absolute top-0 left-0 h-screen z-[1] w-full bg-white/80"></div>
-      </div>
-
       <div className="min-h-screen absolute inset-0 overflow-hidden z-20">
         <div className=" h-[137px] w-full flex items-center justify-between px-[50px]">
           <p className=" text-4xl  text-black">Gift a Moment</p>

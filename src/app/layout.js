@@ -16,9 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Evol Ai",
+  title: "Evol AI",
   description:
-    "An interactive jewelry kiosk where users answer a few questions and AI recommends the perfect jewelry. Spin the wheel to win gold charms and exclusive coupon codes.",
+    "An interactive jewelry kiosk where users answer a few questions and AI recommends the perfect jewelry. Spin the wheel to win gold beans and exclusive coupon codes.",
 };
 
 export default function RootLayout({ children }) {

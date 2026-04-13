@@ -130,16 +130,9 @@ const Page = () => {
 
   return (
     <div className="relative w-full h-screen">
-      {/* Background video */}
-      <div className="w-full h-screen absolute top-0 left-0 z-0">
-        <video
-          src="https://ts-bucket.mum-objectstore.e2enetworks.net/evol_4b2a7deae5.mp4"
-          loop
-          autoPlay
-          muted
-          className="w-full h-full object-cover"
-        ></video>
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+      {/* Background */}
+      <div className="w-full h-screen z-0 absolute top-0 left-0">
+        <div className="absolute top-0 left-0 h-screen z-[1] w-full bg-blue-950/80"></div>
       </div>
 
       {/* Foreground */}
@@ -153,7 +146,7 @@ const Page = () => {
             <ArrowLeft size={32} strokeWidth={2} />
             Back
           </Link>
-          <p className="text-white text-[30px]">Charms</p>
+          <p className="text-white text-[30px]">Beans</p>
           <Link
             href="/home"
             className="rounded-md border-[2.207px] text-xl text-white border-[#FFFFFF66] px-3 py-2 grid place-content-center"
@@ -171,7 +164,7 @@ const Page = () => {
                   <motion.img
                     key={charmsIndex}
                     src={charms[charmsIndex].src}
-                    alt="Charms"
+                    alt="Beans"
                     className="h-full w-full object-contain"
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}

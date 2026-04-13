@@ -8,14 +8,14 @@ const SpinWheel = () => {
   const [result, setResult] = useState(null);
 
   const segments = [
-    { id: 1, emoji: "💰", label: "Money Bag", isWin: true, probability: 0.05 },
-    { id: 2, emoji: "🌵", label: "Cactus", isWin: false, probability: 0.25 },
-    { id: 3, emoji: "🍯", label: "Honey Pot", isWin: true, probability: 0.08 },
-    { id: 4, emoji: "🌵", label: "Cactus", isWin: false, probability: 0.25 },
-    { id: 5, emoji: "🥜", label: "Peanut", isWin: false, probability: 0.2 },
-    { id: 6, emoji: "🌵", label: "Cactus", isWin: false, probability: 0.1 },
-    { id: 7, emoji: "🍌", label: "Banana", isWin: true, probability: 0.05 },
-    { id: 8, emoji: "🌵", label: "Cactus", isWin: false, probability: 0.02 },
+    { id: 1, emoji: "💰", label: "Money Bag", isWin: true, probability: 0.01 },
+    { id: 2, emoji: "🌵", label: "Cactus", isWin: false, probability: 0.01 },
+    { id: 3, emoji: "🍯", label: "Honey Pot", isWin: true, probability: 0.01 },
+    { id: 4, emoji: "🌵", label: "Cactus", isWin: false, probability: 0.01 },
+    { id: 5, emoji: "🥜", label: "Peanut", isWin: false, probability: 0.01 },
+    { id: 6, emoji: "🌵", label: "Cactus", isWin: false, probability: 0.01 },
+    { id: 7, emoji: "🍌", label: "Banana", isWin: true, probability: 0.01 },
+    { id: 8, emoji: "🌵", label: "Cactus", isWin: false, probability: 0.01 },
   ];
 
   const segmentAngle = 360 / segments.length;
@@ -23,7 +23,7 @@ const SpinWheel = () => {
   const selectSegmentByProbability = () => {
     const totalProbability = segments.reduce(
       (sum, seg) => sum + seg.probability,
-      0
+      0,
     );
     let random = Math.random() * totalProbability;
 

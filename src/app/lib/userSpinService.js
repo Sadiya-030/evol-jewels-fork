@@ -12,8 +12,20 @@
 import { isValidPhoneNumber } from "libphonenumber-js";
 
 const STRAPI_URL = process.env.CMSURL;
+const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN;
 const SERVICE_UNAVAILABLE_MESSAGE =
   "Sorry, service unavailable. We are trying to get it back up!";
+
+// Common headers for Strapi API requests
+const getStrapiHeaders = (includeContentType = true) => {
+  const headers = {
+    Authorization: `Bearer ${STRAPI_TOKEN}`,
+  };
+  if (includeContentType) {
+    headers["Content-Type"] = "application/json";
+  }
+  return headers;
+};
 
 /**
  * Normalize phone number to consistent format
@@ -68,7 +80,10 @@ export async function getUserByPhone(phoneNumber) {
 
     console.log(`[UserSpinService] Query URL: ${url}`);
 
-    const res = await fetch(url, { cache: "no-store" });
+    const res = await fetch(url, {
+      cache: "no-store",
+      headers: getStrapiHeaders(false),
+    });
 
     if (!res.ok) {
       console.error(
@@ -159,9 +174,7 @@ export async function createUser(name, phoneNumber) {
   try {
     const res = await fetch(`${STRAPI_URL}/api/user-spins`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: getStrapiHeaders(),
       body: JSON.stringify({
         data: {
           name: name?.trim() || "",
@@ -250,9 +263,7 @@ export async function decrementSpin(phoneNumber) {
       `${STRAPI_URL}/api/user-spins/${user.documentId}`,
       {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: getStrapiHeaders(),
         body: JSON.stringify({
           data: {
             spinAvailable: newSpinCount,

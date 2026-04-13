@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -18,7 +18,7 @@ const CardSlider2 = () => {
       id: 1,
       title: "Claim",
       url: "/home/charms/charms-code",
-      desc: "Have a special code? Redeem it here to unlock your gold charm.",
+      desc: "Have a special code? Redeem it here to unlock your gold bean.",
       buttonLabel: "Enter Code",
       charm: img3.src,
       src: "/gift-joy.png",
@@ -96,7 +96,7 @@ const CardSlider2 = () => {
       className="w-full mt-[46px] mb-[106px] overflow-x-auto no-scrollbar scrollbar-hide cursor-grab touch-pan-x"
       style={{
         WebkitOverflowScrolling: "touch",
-        scrollBehavior: "smooth"
+        scrollBehavior: "smooth",
       }}
     >
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">

@@ -18,7 +18,7 @@ export default function Questionnaire() {
     setIsLoading(true);
     try {
       const response = await fetch(
-        "https://evol.thumbstack.dev/api/products/search",
+        `${process.env.NEXT_PUBLIC_CMSURL}/api/products/search`,
         {
           method: "POST",
           headers: {
@@ -28,7 +28,7 @@ export default function Questionnaire() {
             query: tagString,
             topK: 10,
           }),
-        }
+        },
       );
 
       const data = await response.json();
@@ -66,7 +66,9 @@ export default function Questionnaire() {
         ? [...tags.filter((t) => t !== answers[currentStepId]), option.tag]
         : tags;
       const tagString = updatedTags.join(" ");
-      // fetchProducts(tagString);
+      console.log(tagString);
+
+      fetchProducts(tagString);
     }
   };
 

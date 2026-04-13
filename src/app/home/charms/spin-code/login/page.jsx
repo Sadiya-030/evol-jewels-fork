@@ -208,16 +208,9 @@ const Page = () => {
         />
       )}
 
-      {/* Background video */}
-      <div className="w-full h-screen absolute top-0 left-0 z-0">
-        <video
-          src="https://ts-bucket.mum-objectstore.e2enetworks.net/evol_4b2a7deae5.mp4"
-          loop
-          autoPlay
-          muted
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+      {/* Background */}
+      <div className="w-full h-screen z-0 absolute top-0 left-0">
+        <div className="absolute top-0 left-0 h-screen z-[1] w-full bg-blue-950/80"></div>
       </div>
 
       {/* Foreground content */}
@@ -226,15 +219,15 @@ const Page = () => {
         <div className="h-[103px] flex-shrink-0 bg-gray-100/10 flex justify-between items-center px-[50px] w-full">
           <Link
             href="/home/charms"
-            className="flex text-black items-center gap-4 text-[24px]"
+            className="flex text-white items-center gap-4 text-[24px]"
           >
-            <ArrowLeft size={32} className="text-black" />
+            <ArrowLeft size={32} className="text-white" />
             Back
           </Link>
-          <p className="text-black text-[30px]">Charms</p>
+          <p className="text-white text-[30px]">Beans</p>
           <Link
             href="/home"
-            className="rounded-md border-[2.207px] text-xl text-black border-black px-3 py-2 grid place-content-center"
+            className="rounded-md border-[2.207px] text-xl text-white border-[#FFFFFF66] px-3 py-2 grid place-content-center"
           >
             Home
           </Link>
@@ -244,14 +237,14 @@ const Page = () => {
         <div className="px-[100px] h-fit flex-col flex items-start mt-[40px]">
           <div className="w-full h-fit mt-[65px] mb-12">
             <div className="flex flex-col justify-center items-center w-full mb-[58px]">
-              {/* Charms Icon */}
+              {/* Beans Icon */}
               <div className="h-[224px] w-[224px] rounded-full border-2 border-gray-500 mb-[77px] p-[22px]">
                 <div className="bg-white h-full rounded-full p-7 flex items-center justify-center">
                   <AnimatePresence mode="wait">
                     <motion.img
                       key={currentIndex}
                       src={charms[currentIndex].src}
-                      alt="Charms"
+                      alt="Beans"
                       className="h-full w-full object-contain"
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}

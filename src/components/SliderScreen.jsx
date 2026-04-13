@@ -62,12 +62,6 @@ const SliderScreen = () => {
   return (
     <div className="w-full relative h-full">
       <div className="w-full h-screen z-0 absolute top-0 left-0">
-        <video
-          src="https://ts-bucket.mum-objectstore.e2enetworks.net/evol_4b2a7deae5.mp4"
-          loop
-          autoPlay
-          className="w-full h-full object-cover"
-        ></video>
         <div className=" absolute top-0 left-0 h-screen z-[1] w-full bg-blue-950/80"></div>
       </div>
 

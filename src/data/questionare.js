@@ -487,7 +487,7 @@ export const questionnaire = {
         label: "Cushion",
         nextStep: "engagement-tone-material",
         tag: "cushion",
-        src: "https://images.unsplash.com/photo-1586104237516-5765cf54e56a?w=800&q=80",
+        src: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&q=80",
       },
     ],
   },

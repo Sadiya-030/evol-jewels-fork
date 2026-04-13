@@ -20,39 +20,26 @@ export const markCouponAsUsed = async (
     });
 
     const vendResult = await vendRes.json();
+
+    // Check for errors from the server
     if (vendResult?.success === false || vendResult.charmsNotfound) {
       return vendResult;
     }
-    const espResponse = await fetch("http://EVOLVendingMachine.local/vend", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        command: "VEND",
-        slot: vendResult?.slotNo,
-      }),
-    });
 
-    if (!espResponse.ok) {
-      throw new Error("Sorry, service unavailable. We are trying to get it back up!");
-    }
-
-    const espText = await espResponse.text();
-
+    // Server already handles vending machine communication via /api/vend
     return vendResult;
   } catch (error) {
     console.error("markCouponAsUsed error:", error);
     return {
-      error: error.message || "markCouponAsUsed failed",
-      sucess: false,
+      error:
+        "Unable to process your request. Please contact store staff for assistance.",
+      success: false,
     };
   }
 };
 
 export const markSpinCouponAsUsed = async (sessionID) => {
   try {
-    // 1️⃣ Update coupon in Strapi (set false)
     const vendRes = await fetch("/api/vend", {
       method: "POST",
       headers: {
@@ -70,15 +57,13 @@ export const markSpinCouponAsUsed = async (sessionID) => {
     }
 
     const result = await vendRes.json();
-
-    // ✅ Vend success → do nothing
     return result;
   } catch (error) {
-    console.error("markCouponAsUsed error:", error);
-    // throw error;
+    console.error("markSpinCouponAsUsed error:", error);
     return {
-      error: error.message || "markCouponAsUsed failed",
-      sucess: false,
+      error:
+        "Unable to process your request. Please contact store staff for assistance.",
+      success: false,
     };
   }
 };

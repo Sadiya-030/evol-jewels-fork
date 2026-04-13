@@ -12,15 +12,7 @@ export default function Home() {
     <main className="min-h-screen w-screen overflow-hidden flex items-center justify-center bg-gray-50">
       <div className=" h-screen relative w-full bg-blue-500 flex flex-col items-center justify-center">
         <div className=" w-full h-screen z-0 absolute top-0 left-0">
-          <video
-            src="https://ts-bucket.mum-objectstore.e2enetworks.net/evol_4b2a7deae5.mp4"
-            loop
-            muted
-            autoPlay
-            playsInline
-            className=" w-full h-full object-cover"
-          ></video>
-          <div className="  absolute h-full w-full top-0 left-0 z-10 bg-blue-950/75"></div>
+          <div className="absolute h-full w-full top-0 left-0 z-10 bg-blue-950/75"></div>
         </div>
         <div className="absolute top-[700px] left-[-100px] flex  z-10items-center justify-center pointer-events-none">
           <div className="w-[1300px] h-[500px] rounded-full rotate-170 bg-[#bd72ff]/20 blur-[100px]"></div>

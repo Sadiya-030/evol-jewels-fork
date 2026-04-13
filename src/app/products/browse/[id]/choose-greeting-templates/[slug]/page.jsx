@@ -34,7 +34,7 @@ const page = () => {
     "Change tone",
   ];
 
-  const [greetingDataText, setgreetingDataText] = useState(selectedCard?.msg);
+  const [greetingDataText, setgreetingDataText] = useState(selectedCard?.msg || "");
   const [isLoading, setIsLoading] = useState(false);
   const [isKeyboard, setisKeyboard] = useState(false);
   const [grtpicks, setgrtpicks] = useState("");
@@ -44,7 +44,7 @@ const page = () => {
     const wordLimit = 18;
     try {
       const res = await fetch(
-        "https://evol.thumbstack.dev/api/products/greet-message",
+        `${process.env.NEXT_PUBLIC_CMSURL}/api/products/greet-message`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -55,7 +55,7 @@ const page = () => {
             words: wordLimit,
             product: product?.product?.pineconeMetadata?.productTitle,
           }),
-        }
+        },
       );
 
       const data = await res.json();
@@ -74,7 +74,7 @@ const page = () => {
     const wordLimit = option === "Make it shorter" ? 14 : 20;
     try {
       const res = await fetch(
-        "https://evol.thumbstack.dev/api/products/greet-message",
+        `${process.env.NEXT_PUBLIC_CMSURL}/api/products/greet-message`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -86,7 +86,7 @@ const page = () => {
             product: product?.product?.pineconeMetadata?.productTitle,
             message: greetingDataText,
           }),
-        }
+        },
       );
 
       const data = await res.json();
@@ -125,16 +125,6 @@ const page = () => {
 
   return (
     <div className=" relative">
-      <div className=" w-full h-screen z-0 absolute top-0 left-0">
-        <video
-          src="https://ts-bucket.mum-objectstore.e2enetworks.net/7946210_hd_720_1366_30fps_3_c58042e06d.mp4"
-          loop
-          autoPlay
-          muted
-          className=" w-full h-full object-cover"
-        ></video>
-        <div className=" absolute top-0 left-0 h-screen z-[1] w-full bg-white/80"></div>
-      </div>
       <div className="min-h-screen h-full w-full  relative z-50 bg-white/70">
         <div className=" h-[137px] border-b border-[#CECECE] w-full flex items-center justify-between px-[50px]">
           <p className=" text-4xl  text-black">Gift a Moment</p>

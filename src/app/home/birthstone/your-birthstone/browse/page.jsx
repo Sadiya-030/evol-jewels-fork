@@ -20,7 +20,7 @@ export default function ProductsPage() {
     setisLoading(true);
     try {
       const response = await fetch(
-        "https://evol.thumbstack.dev/api/products/search",
+        `${process.env.NEXT_PUBLIC_CMSURL}/api/products/search`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -29,7 +29,7 @@ export default function ProductsPage() {
               "I want a gift for my sister and she likes ring gid://shopify/Product/9782295429434 gid://shopify/Product/8580955177274 gid://shopify/Product/8115579945274 gid://shopify/Product/8539391885626 gid://shopify/Product/9713166156090 gid://shopify/Product/9380841816378 gid://shopify/Product/9285483397434 gid://shopify/Product/9731609198906 gid://shopify/Product/9020434415930 gid://shopify/Product/9712279519546 gid://shopify/Product/8120423842106 gid://shopify/Product/10043819065658 gid://shopify/Product/9693463085370",
             topK: 36,
           }),
-        }
+        },
       );
 
       const data = await response.json();

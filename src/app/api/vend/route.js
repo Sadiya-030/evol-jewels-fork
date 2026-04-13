@@ -1,6 +1,11 @@
 import { getSession, updateSession } from "../../lib/session";
 import { NextResponse } from "next/server";
 
+const getStrapiHeaders = () => ({
+  "Content-Type": "application/json",
+  Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
+});
+
 export async function POST(req) {
   try {
     const body = await req.json();
@@ -22,9 +27,7 @@ export async function POST(req) {
 
       const charmsValidRes = await fetch(apiURL, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: getStrapiHeaders(),
         body: JSON.stringify({
           data: {
             isValidCoupon: false,
@@ -34,7 +37,7 @@ export async function POST(req) {
       const charmsValidResult = await charmsValidRes.json();
 
       if (charmsValidResult?.data === null || charmsValidResult.error) {
-        throw new Error("Invalid Charms");
+        throw new Error("Invalid Beans");
       }
 
       await updateSession(sessionId, {
@@ -50,12 +53,17 @@ export async function POST(req) {
       // 1️⃣ Fetch slot data from CMS
       const fetchSlotRes = await fetch(
         `${process.env.CMSURL}/api/charms?filters[title][$eq]=${name}&filters[grams][$eq]=${weight}`,
+        { headers: getStrapiHeaders() },
       );
 
       // ❌ If CMS API fails
       if (!fetchSlotRes.ok) {
         return NextResponse.json(
-          { success: false, message: "Sorry, service unavailable. We are trying to get it back up!" },
+          {
+            success: false,
+            message:
+              "Sorry, service unavailable. We are trying to get it back up!",
+          },
           { status: 400 },
         );
       }
@@ -66,7 +74,7 @@ export async function POST(req) {
       // ❌ No charms found at all
       if (charmsList.length === 0) {
         return NextResponse.json(
-          { success: false, message: "Charms not found" },
+          { success: false, message: "Beans not found" },
           { status: 404 },
         );
       }
@@ -92,9 +100,7 @@ export async function POST(req) {
       const charmId = availableCharm.documentId;
       await fetch(`${process.env.CMSURL}/api/charms/${charmId}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: getStrapiHeaders(),
         body: JSON.stringify({
           data: {
             inventory: Number(availableCharm.inventory) - 1,
@@ -108,9 +114,7 @@ export async function POST(req) {
 
       const charmsValidRes = await fetch(apiURL, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: getStrapiHeaders(),
         body: JSON.stringify({
           data: {
             isValidCoupon: false,
@@ -120,7 +124,7 @@ export async function POST(req) {
       const charmsValidResult = await charmsValidRes.json();
       console.log("charmsValidResult", charmsValidResult);
       if (charmsValidResult?.data === null || charmsValidResult.error) {
-        throw new Error("Invalid Charms");
+        throw new Error("Invalid Beans");
       }
       await updateSession(sessionId, {
         state: "VEND_LOCKED",
@@ -128,6 +132,8 @@ export async function POST(req) {
 
       // Call vending machine (ESP32 or Simulator)
       const vendingUrl = process.env.VENDING_URL || "http://localhost:8080";
+      let vendingMachineError = false;
+
       try {
         console.log(
           `[VEND] Calling vending machine at ${vendingUrl}/vend with slot ${slotNo}`,
@@ -142,18 +148,30 @@ export async function POST(req) {
 
         if (!vendResponse.ok) {
           console.error("[VEND] Vending machine error:", vendResult);
+          vendingMachineError = true;
         }
       } catch (vendError) {
         console.error(
           "[VEND] Failed to call vending machine:",
           vendError.message,
         );
-        // Don't fail the request if vending machine is unreachable - just log it
+        vendingMachineError = true;
+      }
+
+      // If vending machine had issues, return success but with warning
+      if (vendingMachineError) {
+        return NextResponse.json({
+          success: true,
+          vendingMachineError: true,
+          message:
+            "Your code has been redeemed. If the machine did not dispense your bean, please contact store staff with your code for assistance.",
+          slotNo: slotNo,
+        });
       }
 
       return NextResponse.json({
         success: true,
-        message: "Charms vend successfully",
+        message: "Beans vend successfully",
         slotNo: slotNo,
       });
     }

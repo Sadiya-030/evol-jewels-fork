@@ -25,12 +25,12 @@ const CardSlider = () => {
     },
     {
       id: 2,
-      title: "Charms",
+      title: "Beans",
       url: "/home/charms",
       description: "This is card 2 description",
       stone: charms1.src,
 
-      src: "/charms.png",
+      src: "/charms.jpeg",
     },
     {
       id: 3,

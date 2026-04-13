@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import React, { useEffect, useState, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const page = () => {
   const router = useRouter();
@@ -37,8 +37,8 @@ const page = () => {
       ],
     },
   ];
-  const str = window.location.href;
-  const parts = str.split("/").filter(Boolean); // ["sdf", "sdfs", "sdfsf", "sdfsdf"]
+  const pathname = usePathname();
+  const parts = pathname.split("/").filter(Boolean);
   const secondLast = parts[parts.length - 2];
   const currenturl = parts[parts.length - 1];
 
@@ -50,7 +50,7 @@ const page = () => {
       const products = JSON.parse(storedProducts);
       //   const productId = decodeURIComponent(params.id);
       const foundProduct = products?.filter(
-        (e) => e?.pineconeMetadata?.productHandle === secondLast
+        (e) => e?.pineconeMetadata?.productHandle === secondLast,
       );
       if (foundProduct) {
         setproductdetail(foundProduct[0]);
@@ -112,7 +112,7 @@ const page = () => {
 
     try {
       const res = await fetch(
-        "https://evol.thumbstack.dev/api/products/greet-message",
+        `${process.env.NEXT_PUBLIC_CMSURL}/api/products/greet-message`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -123,7 +123,7 @@ const page = () => {
             words: wordLimit,
             product: "bracelet",
           }),
-        }
+        },
       );
 
       const data = await res.json();
@@ -150,15 +150,7 @@ const page = () => {
   const currentQuestion = dataforQuestionOptions[step - 1];
   return (
     <div className="relative w-full h-full">
-      <div className="w-full h-screen absolute top-0 left-0 z-0">
-        <video
-          src="https://ts-bucket.mum-objectstore.e2enetworks.net/evol_4b2a7deae5.mp4"
-          loop
-          autoPlay
-          muted
-          className="w-full h-full object-cover"
-        ></video>
-      </div>
+      <div className="w-full h-screen absolute top-0 left-0 z-0"></div>
 
       <div className="relative z-50">
         {/* Header */}

@@ -44,16 +44,9 @@ const Page = () => {
 
   return (
     <div className="relative w-full h-screen">
-      {/* Background video - matching other spin pages */}
-      <div className="w-full h-screen absolute top-0 left-0 z-0">
-        <video
-          src="https://ts-bucket.mum-objectstore.e2enetworks.net/evol_4b2a7deae5.mp4"
-          loop
-          autoPlay
-          muted
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+      {/* Background */}
+      <div className="w-full h-screen z-0 absolute top-0 left-0">
+        <div className="absolute top-0 left-0 h-screen z-[1] w-full bg-blue-950/80"></div>
       </div>
 
       {/* Foreground content */}
@@ -67,7 +60,7 @@ const Page = () => {
             <ArrowLeft size={32} className="text-black" />
             Back
           </Link>
-          <p className="text-black text-[30px]">Charms</p>
+          <p className="text-black text-[30px]">Beans</p>
           <Link
             href="/home"
             className="rounded-md border-[2.207px] text-xl text-black border-black px-3 py-2 grid place-content-center"
@@ -78,14 +71,14 @@ const Page = () => {
 
         {/* Content */}
         <div className="px-[100px] flex-1 flex flex-col items-center justify-center">
-          {/* Animated Charms Icon */}
+          {/* Animated Beans Icon */}
           <div className="h-[224px] w-[224px] rounded-full border-2 border-gray-500 mb-[50px] p-[22px]">
             <div className="bg-white h-full rounded-full p-7 flex items-center justify-center">
               <AnimatePresence mode="wait">
                 <motion.img
                   key={currentIndex}
                   src={charms[currentIndex].src}
-                  alt="Charms"
+                  alt="Beans"
                   className="h-full w-full object-contain"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -114,12 +107,12 @@ const Page = () => {
 
           {/* Action Buttons */}
           <div className="w-full max-w-[600px] flex flex-col gap-5">
-            {/* Primary CTA - Explore More Charms */}
+            {/* Primary CTA - Explore More Beans */}
             <Link
               href="/home/charms"
               className="bg-white font-ethereal text-[30px] h-[106px] text-center text-black flex items-center justify-center w-full rounded-full hover:bg-white/90 transition-colors"
             >
-              Explore More Charms
+              Explore More Beans
             </Link>
           </div>
         </div>

@@ -21,67 +21,56 @@ export default function ProductsPage() {
 
   const { liked } = usePreferenceProdStore();
   const [isLoading, setisLoading] = useState(false);
-  // const fetchProducts = async (tagString) => {
-  //   setisLoading(true);
-  //   try {
-  //     const response = await fetch(
-  //       "https://evol.thumbstack.dev/api/products/search",
-  //       {
-  //         method: "POST",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify({ query: tagString, topK: 36 }),
-  //       }
-  //     );
+  const fetchProducts = async (tagString) => {
+    setisLoading(true);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_CMSURL}/api/products/search`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query: tagString, topK: 36 }),
+        },
+      );
 
-  //     const data = await response.json();
+      const data = await response.json();
 
-  //     if (data.success && data.products) {
-  //       setBrowseProducts(data.products);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching products:", error);
-  //     alert("Failed to fetch products. Please try again.");
-  //   } finally {
-  //     setisLoading(false);
-  //   }
-  // };
+      if (data.success && data.products) {
+        setBrowseProducts(data.products);
+      }
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      alert("Failed to fetch products. Please try again.");
+    } finally {
+      setisLoading(false);
+    }
+  };
 
-  // useEffect(() => {
-  //   // Wait for Zustand to hydrate from localStorage
-  //   if (!hasHydrated) return;
-  //   const datatsRaw = sessionStorage.getItem("products");
+  useEffect(() => {
+    // Wait for Zustand to hydrate from localStorage
+    if (!hasHydrated) return;
+    const datatsRaw = sessionStorage.getItem("products");
 
-  //   const datats = datatsRaw ? JSON.parse(datatsRaw) : [];
-  //   console.log(datats);
-  //   const storedQuery = sessionStorage.getItem("searchQuery");
+    const datats = datatsRaw ? JSON.parse(datatsRaw) : [];
+    console.log(datats);
+    const storedQuery = sessionStorage.getItem("searchQuery");
 
-  //   // If data already exists → do NOT call API
-  //   if (browseProducts.length > 0) {
-  //     console.log("Using cached products. No API call.");
-  //     return;
-  //   }
+    // If data already exists → do NOT call API
+    if (browseProducts.length > 0) {
+      console.log("Using cached products. No API call.");
+      return;
+    }
 
-  //   if (!storedQuery) return;
+    if (!storedQuery) return;
 
-  //   // Fetch only when products are empty
-  //   fetchProducts(`${storedQuery} ${[...liked].join(" ")}`);
-  // }, [hasHydrated]); // <-- IMPORTANT!
+    // Fetch only when products are empty
+    fetchProducts(`${storedQuery} ${[...liked].join(" ")}`);
+  }, [hasHydrated]); // <-- IMPORTANT!
 
   const [isOpen, setisOpen] = useState(false);
   const [HeaderName, setHeaderName] = useState("");
   return (
     <div>
-      <div className=" w-full h-screen z-0 absolute top-0 left-0">
-        <video
-          src="https://ts-bucket.mum-objectstore.e2enetworks.net/7946210_hd_720_1366_30fps_3_c58042e06d.mp4"
-          loop
-          autoPlay
-          muted
-          className=" w-full h-full object-cover"
-        ></video>
-        <div className=" absolute top-0 left-0 h-screen z-[1] w-full bg-white/80"></div>
-      </div>
-
       <div className="min-h-screen absolute inset-0 overflow-hidden z-20">
         <div className=" h-[137px] w-full flex items-center justify-between px-[50px]">
           <p className=" text-4xl  text-black">Gift a Moment</p>
