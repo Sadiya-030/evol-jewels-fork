@@ -6,7 +6,6 @@ import charms1 from "../../../../../public/charmsicons1.png";
 import charms2 from "../../../../../public/charmsicons2.png";
 import charms3 from "../../../../../public/charmsicons3.png";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
 
 const KeyboardKey = ({ label, onClick, className = "" }) => (
   <button

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, AlertCircle } from "lucide-react";
 
 const ServiceError = ({ onRetry, homeLink = "/home" }) => {
   return (
@@ -13,21 +13,7 @@ const ServiceError = ({ onRetry, homeLink = "/home" }) => {
       <div className="relative bg-white rounded-[32px] w-[90%] max-w-[800px] z-10 py-[80px] px-[60px] shadow-2xl flex flex-col items-center justify-center">
         {/* Icon */}
         <div className="w-[120px] h-[120px] rounded-full bg-red-100 flex items-center justify-center mb-8">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="60"
-            height="60"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#dc2626"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="8" x2="12" y2="12" />
-            <line x1="12" y1="16" x2="12.01" y2="16" />
-          </svg>
+          <AlertCircle size={60} className="text-red-600" />
         </div>
 
         {/* Title */}

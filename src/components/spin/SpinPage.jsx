@@ -75,7 +75,11 @@ const SpinPage = ({ charmsssr, Probability }) => {
     { id: 8, emoji: "", label: "", isWin: false, probability: 0.05 },
   ];
 
-  // Track if this is phone-based flow
+  /**
+   * Track authentication flow type:
+   * Phone-based flow: User enters phone number, spin is recorded via /api/user-spin/spin
+   * Coupon-based flow (legacy): User enters coupon code, spin is recorded via markCouponAsUsed
+   */
   const [isPhoneFlow, setIsPhoneFlow] = useState(false);
   const [userPhoneNumber, setUserPhoneNumber] = useState("");
 
@@ -121,8 +125,8 @@ const SpinPage = ({ charmsssr, Probability }) => {
   };
   const [issuccessspin, setisSucesssSpin] = useState(false);
 
-  // Decrement spin for phone-based flow
-  const decrementUserSpin = async () => {
+  // Register user spin and decrement spin count for phone-based flow
+  const registerUserSpin = async () => {
     try {
       const res = await fetch("/api/user-spin/spin", {
         method: "PUT",
@@ -132,7 +136,7 @@ const SpinPage = ({ charmsssr, Probability }) => {
       const data = await res.json();
       return data;
     } catch (error) {
-      console.error("Error decrementing spin:", error);
+      console.error("Error registering spin:", error);
       return { success: false, error: error.message };
     }
   };
@@ -142,15 +146,19 @@ const SpinPage = ({ charmsssr, Probability }) => {
 
     // Handle phone-based flow
     if (isPhoneFlow) {
-      // Decrement spin count
-      const decrementResult = await decrementUserSpin();
-      if (decrementResult?.success === false) {
+      // Register spin and decrement spin count
+      const registerResult = await registerUserSpin();
+      if (registerResult?.success === false) {
+        // Show error and discard current spin result
         setnotifymsg(
-          decrementResult?.message ||
-            decrementResult?.error ||
+          registerResult?.message ||
+            registerResult?.error ||
             "Failed to record spin",
         );
         setnotifimodal(true);
+        // Reset spin state to allow retry
+        setResult(null);
+        setRotation(0);
         return;
       }
 
