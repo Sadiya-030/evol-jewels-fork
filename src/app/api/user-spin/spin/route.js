@@ -32,7 +32,7 @@ export async function PUT(req) {
     if (!phoneNumber) {
       return NextResponse.json(
         { success: false, message: "Phone number is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -40,7 +40,7 @@ export async function PUT(req) {
     if (!validation.valid) {
       return NextResponse.json(
         { success: false, message: validation.error },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -50,7 +50,7 @@ export async function PUT(req) {
     if (!result.success) {
       return NextResponse.json(
         { success: false, message: result.error },
-        { status: result.status || 500 }
+        { status: result.status || 500 },
       );
     }
 
@@ -69,9 +69,9 @@ export async function PUT(req) {
     return NextResponse.json(
       {
         success: false,
-        message: "Sorry, service unavailable. We are trying to get it back up!",
+        message: "Sorry, Service Unavailable. We are Trying to Get it Back Up!",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

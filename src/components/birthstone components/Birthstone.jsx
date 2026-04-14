@@ -4,13 +4,13 @@ import AstroQueForm from "./AstroQueForm";
 
 const Birthstone = () => {
   return (
-    <div className=" relative  w-full h-screen">
-      <div className=" w-full h-screen z-0 absolute top-0 left-0">
+    <div className="relative w-full h-screen">
+      <div className="w-full h-screen z-0 absolute top-0 left-0">
         <div className="absolute h-full w-full top-0 left-0 z-10 bg-blue-950/70"></div>
       </div>
-      <div className=" relative z-50">
-        <div className=" h-[103px]  bg-gray-100/10  flex justify-between items-center px-[50px] w-full ">
-          <p className=" text-white text-[30px]">Star Gem</p>
+      <div className="relative z-50">
+        <div className="h-[103px] bg-gray-100/10 flex justify-between items-center px-[50px] w-full">
+          <p className="text-white text-[30px]">Star Gem</p>
           <Link
             href="/home"
             className="rounded-md border-[2.207px] text-xl text-white border-[#f9f9f966] px-3 py-2 grid place-content-center"
@@ -18,7 +18,7 @@ const Birthstone = () => {
             Home
           </Link>
         </div>
-        <div className="  w-full">
+        <div className="w-full">
           <AstroQueForm />
         </div>
       </div>

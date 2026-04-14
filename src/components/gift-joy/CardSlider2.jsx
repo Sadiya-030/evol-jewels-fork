@@ -30,7 +30,7 @@ const CardSlider2 = () => {
       buttonLabel: "Spin now",
       charm: img2.src,
 
-      desc: "Try your luck — one spin could win you a gold ball.",
+      desc: "Try your luck - one spin could win you a gold ball.",
       src: "https://images.unsplash.com/photo-1746678223017-bd2fc129093a?ixlib=rb-4.1.0&auto=format&fit=crop&q=80&w=987",
     },
   ];

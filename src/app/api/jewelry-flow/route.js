@@ -125,9 +125,9 @@ function identifyQuestionFromAssistantMessage(assistantContent) {
   }
   
   // ENGAGEMENT-SPECIFIC QUESTIONS - Check these BEFORE general questions to avoid conflicts
-  
+
   // Diamond shape question
-  if (questionText.includes("diamond shape") || 
+  if (questionText.includes("diamond shape") ||
       questionText.includes("shape speaks") ||
       questionText.includes("diamond cut") ||
       questionText.includes("diamond style") ||
@@ -136,17 +136,11 @@ function identifyQuestionFromAssistantMessage(assistantContent) {
       (questionText.includes("shape") && (questionText.includes("prefer") || questionText.includes("feels")))) {
     return 'engagement-diamond-shape';
   }
-  
-  // Metal tone/color question - CHECK BEFORE general material question
-  if (questionText.includes("metal tone") || 
-      questionText.includes("metal color") ||
-      questionText.includes("gold tone") ||
-      questionText.includes("tone do you prefer") ||
-      questionText.includes("what metal tone") ||
-      questionText.includes("which metal color") ||
-      questionText.includes("metal shade") ||
-      questionText.includes("tone feels right") ||
-      (questionText.includes("tone") && (questionText.includes("prefer") || questionText.includes("speaks")))) {
+
+  // Engagement metal tone question - ONLY for engagement rings
+  if ((questionText.includes("what metal tone") && questionText.includes("prefer")) ||
+      (questionText.includes("gold tone") && questionText.includes("catches your eye")) ||
+      (questionText.includes("tone") && questionText.includes("feels right") && questionText.includes("metal"))) {
     return 'engagement-tone-material';
   }
   
@@ -177,22 +171,30 @@ function identifyQuestionFromAssistantMessage(assistantContent) {
     return 'style-preference';
   }
   
-  // Wear type question (everyday vs special wear)
-  if (questionText.includes("everyday wear") || 
-      questionText.includes("special wear") ||
-      questionText.includes("daily use") ||
-      questionText.includes("special occasions") ||
-      questionText.includes("how often") ||
-      questionText.includes("regular wear") ||
-      questionText.includes("special events") ||
-      questionText.includes("everyday piece") ||
-      questionText.includes("intended use") ||
-      (questionText.includes("wear") && (questionText.includes("everyday") || questionText.includes("special") || questionText.includes("daily")))) {
-    return 'wear-type';
+  // Color preference question - Check BEFORE material question to avoid conflicts
+  if (questionText.includes("preferred metal color") ||
+      questionText.includes("metal color") ||
+      questionText.includes("which metal color") ||
+      questionText.includes("what metal color") ||
+      questionText.includes("metal shade") ||
+      questionText.includes("tone speaks") ||
+      questionText.includes("yellow gold") ||
+      questionText.includes("rose gold") ||
+      questionText.includes("white gold") ||
+      questionText.includes("color do you love") ||
+      questionText.includes("tone speaks to you") ||
+      questionText.includes("shade appeals") ||
+      questionText.includes("favorite metal tone") ||
+      (questionText.includes("color") && questionText.includes("prefer"))) {
+    return 'color-preference';
   }
-  
-  // Material question - Now checked AFTER engagement-tone-material
-  if (questionText.includes("which metal") || 
+
+  // Material/Purity question - Checked AFTER color-preference
+  if (questionText.includes("which purity") ||
+      questionText.includes("purity do you prefer") ||
+      questionText.includes("which karat") ||
+      questionText.includes("gold purity") ||
+      questionText.includes("which metal") ||
       questionText.includes("metal preference") ||
       questionText.includes("type of metal") ||
       questionText.includes("metal & stone") ||
@@ -201,7 +203,7 @@ function identifyQuestionFromAssistantMessage(assistantContent) {
       (questionText.includes("combination") && questionText.includes("feels"))) {
     return 'material';
   }
-  
+
   // Budget question
   if (questionText.includes("budget") || 
       questionText.includes("price range") || 
@@ -339,12 +341,11 @@ function decideNextQuestion(collectedTags, askedQuestions) {
   
   const questionFlow = [
     "recipient",
-    "occasion", 
-    "jewelry-category",
+    "occasion",
     "style-preference",
-    "wear-type",
+    "jewelry-category",
     "material",
-    "engagement-tone-material",
+    "color-preference",
     "budget"
   ];
   

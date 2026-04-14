@@ -55,15 +55,15 @@ const Page = () => {
         <div className="h-[103px] flex-shrink-0 bg-gray-100/10 flex justify-between items-center px-[50px] w-full">
           <Link
             href="/home/charms/spin-code/login"
-            className="flex text-black items-center gap-4 text-[24px]"
+            className="flex text-white items-center gap-4 text-[24px]"
           >
-            <ArrowLeft size={32} className="text-black" />
+            <ArrowLeft size={32} className="text-white" />
             Back
           </Link>
-          <p className="text-black text-[30px]">Beans</p>
+          <p className="text-white text-[30px]">Beans</p>
           <Link
             href="/home"
-            className="rounded-md border-[2.207px] text-xl text-black border-black px-3 py-2 grid place-content-center"
+            className="rounded-md border-[2.207px] text-xl text-white border-[#FFFFFF66] black px-3 py-2 grid place-content-center"
           >
             Home
           </Link>

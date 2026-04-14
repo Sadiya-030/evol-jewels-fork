@@ -11,7 +11,6 @@ import Keyboard from "../../components/Keyboard";
 import LoadingProd from "../../components/LoadingProd";
 import { AnimatePresence, motion } from "framer-motion";
 import VideoLayer from "../../components/ui/VideoLayer";
-import { AiOutlineInfoCircle } from "react-icons/ai";
 import { IoArrowBackOutline, IoCloseOutline } from "react-icons/io5";
 import BottomSliderGender from "../BottomSliderGender";
 import ExitModal from "../ui/ExitModal";
@@ -91,11 +90,7 @@ const GiftJoyScreen = ({ setPageState }) => {
   const isoccasion = options.some((item) =>
     item.label.toLowerCase().includes("birthday"),
   );
-  const ismultipleSelect =
-    options.some((item) => item.label.toLowerCase().includes("rings")) ||
-    options.some((item) => item.label.toLowerCase().includes("14k gold")) ||
-    options.some((item) => item.label.toLowerCase().includes("yellow gold")) ||
-    options.some((item) => item.label.toLowerCase().includes("everyday wear"));
+  const ismultipleSelect = false; // Removed multi-select as per requirements
 
   // ---- Helpers ----
   const callFlowApi = async (newHistory) => {
@@ -239,25 +234,16 @@ const GiftJoyScreen = ({ setPageState }) => {
 
   // ---- UI handlers ----
 
-  const handleOptionClick = (option) => {
-    if (ismultipleSelect) {
-      setSelectedOption((prev) => {
-        if (prev.includes(option.label)) {
-          return prev.filter((o) => o !== option.label); // unselect
-        }
-        return [...prev, option.label]; // add
-      });
+  const handleOptionClick = async (option) => {
+    // For single select, immediately proceed to next question
+    setSelectedOption([option.label]);
+    setTypedValue(option.label);
 
-      setTypedValue((prev) => {
-        const values = prev ? prev.split(", ") : [];
-        if (values.includes(option.label)) {
-          return values.filter((v) => v !== option.label).join(", ");
-        }
-        return [...values, option.label].join(", ");
-      });
-    } else {
-      setSelectedOption([option.label]);
-      setTypedValue(option.label);
+    // Auto-proceed to next question for single select
+    if (!ismultipleSelect && !isBudgetStep) {
+      // Small delay for visual feedback
+      await new Promise(resolve => setTimeout(resolve, 300));
+      handleContinue();
     }
   };
 
@@ -556,11 +542,18 @@ const GiftJoyScreen = ({ setPageState }) => {
             {currentQuestion}
           </p>
 
-          {isBudgetStep ? (
-            <div className=" mt-[101px] mb-[100px] flex w-full justify-between items-center">
-              <p className=" text-[80px] font-hind font-light text-white">
-                ₹ {price?.toLocaleString()}
-              </p>
+          {isBudgetStep && (
+            <div className=" mt-[60px] mb-[60px] flex w-full justify-between items-center">
+              {!selectButton && (
+                <p className=" text-[80px] font-hind font-light text-white">
+                  ₹ {price?.toLocaleString()}
+                </p>
+              )}
+              {selectButton && (
+                <p className=" text-[48px] font-hind font-light text-white/60">
+                  No budget selected
+                </p>
+              )}
               <button
                 onClick={() => {
                   if (selectButton) {
@@ -570,7 +563,7 @@ const GiftJoyScreen = ({ setPageState }) => {
                   } else {
                     // turn ON no budget
                     setselectButton(true);
-                    setPrice(1000000);
+                    setPrice(null);
                   }
                 }}
                 className={`${
@@ -580,30 +573,19 @@ const GiftJoyScreen = ({ setPageState }) => {
                 No budget
               </button>
             </div>
-          ) : (
-            !ismultipleSelect && (
-              <div className="px-[45px] mt-[32px] mb-[134px] rounded-[12px] overflow-hidden bg-[#FFFFFF29] h-[108px] w-full border-2 flex gap-2 items-center border-[#EDD9D942]">
-                <input
-                  type="text"
-                  value={typedValue}
-                  onChange={(e) => {
-                    setTypedValue(e.target.value);
-                    setSelectedOption(e.target.value || null);
-                  }}
-                  onFocus={() => setShowKeyboard(true)}
-                  className="text-4xl h-full bg-transparent outline-none w-full text-white placeholder-white/60"
-                  placeholder="Type your answer..."
-                />
-              </div>
-            )
           )}
         </div>
 
         {/* Options + CTA */}
         {isBudgetStep ? (
           <div className="px-[77px] py-6">
-            <PriceSlider price={price} setPrice={setPrice} />
-            <div className="text-center w-full h-full my-[90px]">
+            <PriceSlider
+              price={price}
+              setPrice={setPrice}
+              noBudgetSelected={selectButton}
+              onPriceInteraction={() => setselectButton(false)}
+            />
+            <div className="text-center w-full h-full mt-8 mb-12">
               <button
                 onClick={handleContinue}
                 disabled={isThinking}
@@ -617,17 +599,15 @@ const GiftJoyScreen = ({ setPageState }) => {
           </div>
         ) : (
           <div className="w-full h-full">
-            {!ismultipleSelect && (
-              <p className="text-center text-[28px] text-white leading-[41px]">
-                Smart Picks for You
-              </p>
-            )}
-            <div className="mt-[32px] mb-[0] no-scrollbar gap-[60px] flex py-6 flex-row overflow-x-scroll px-[77px]">
+            <p className="text-center text-[28px] text-white leading-[41px] mb-8 mt-6">
+              Smart Picks for You
+            </p>
+            <div className="mt-[32px] mb-[100px] no-scrollbar gap-[60px] flex py-6 flex-row overflow-x-scroll px-[77px]">
               {options.map((option, i) => (
                 <div
                   key={i}
                   onClick={() => handleOptionClick(option)}
-                  className="flex-shrink-0 border-[0.7px] cursor-pointer border-[#FFBD7D] p-1 bg-yellow-300/20 shadow-amber-100 shadow-[0_0_20px_2px_rgba(255,189,125,0.8)] rounded-full w-[188px] h-[188px] transition"
+                  className="flex-shrink-0 border-[0.7px] cursor-pointer border-[#FFBD7D] p-1 bg-yellow-300/20 shadow-amber-100 shadow-[0_0_20px_2px_rgba(255,189,125,0.8)] rounded-full w-[220px] h-[220px] transition hover:scale-105"
                 >
                   <div className="border relative border-[#FFBD7D] w-full h-full overflow-hidden rounded-full bg-[#D9D9D9] flex items-center justify-center text-[24px] text-white">
                     <p className="text-center tracking-wide font-ethereal z-50 px-2">
@@ -651,27 +631,6 @@ const GiftJoyScreen = ({ setPageState }) => {
                 </div>
               ))}
             </div>
-
-            {typedValue || selectedOption?.length !== 0 ? (
-              <div className="text-center px-[100px] h-full my-[90px]">
-                <button
-                  onClick={handleContinue}
-                  disabled={isThinking}
-                  className="px-10 py-4 shadow-[0_0_30px_rgba(255,255,255,0.7)] cursor-pointer font-ethereal text-[40px] leading-[72px] h-[103px] w-full rounded-[2000px] bg-white text-[#302B2C] text-2xl font-semibold disabled:opacity-60"
-                >
-                  {isThinking ? "Loading..." : "Continue"}
-                </button>
-              </div>
-            ) : (
-              <p className="text-white my-[100px] items-center justify-center flex gap-3 text-center text-2xl leading-[76px] h-full ">
-                <AiOutlineInfoCircle className=" font-hind" size={30} />
-                <span className=" mb-[-5px]">
-                  {!ismultipleSelect
-                    ? "Not sure what to type? You can pick from the smart picks"
-                    : "Select all the types of jewelry you’re drawn to — you can pick more than one!"}
-                </span>
-              </p>
-            )}
           </div>
         )}
       </div>

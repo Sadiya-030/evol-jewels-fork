@@ -22,7 +22,6 @@ const page = async () => {
     console.log("Beans API not available:", error.message);
   }
 
-  // Get spin probability from env var (default 0.25 = 25%)
   const spinProbability = parseFloat(process.env.SPIN_PROBABILITY) || 0.25;
 
   return (

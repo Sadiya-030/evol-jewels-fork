@@ -15,10 +15,11 @@ import { IoCloseOutline } from "react-icons/io5";
 
 function PageContent() {
   const [modalmsg, setmodalmsg] = useState("");
-  const { charmsSize, setCharmsSize } = charmsCode();
+  const [vendingError, setVendingError] = useState(false);
+  const { charmsSize, setCharmsSize, allCharms, setAllCharms } = charmsCode();
   const goldSize = charmsSize?.gold ? Number(charmsSize?.gold) : null;
   const [selectedWeight, setSelectedWeight] = useState(null);
-  const [AllCharms, setallCharms] = useState([]);
+  const [AllCharms, setallCharms] = useState(allCharms || []);
   const router = useRouter();
   const searchParams = useSearchParams();
   const view = searchParams.get("view") || "experience"; // default view
@@ -28,11 +29,14 @@ function PageContent() {
       router.push("/home/charms");
     }
   }, []);
-  useEffect(() => {
-    if (goldSize) {
-      setSelectedWeight(String(goldSize));
-    }
-  }, [goldSize]);
+  // Don't auto-select weight - let user choose
+  // useEffect(() => {
+  //   // Default to 0.5g if available, otherwise 1g
+  //   if (AllCharms.length > 0) {
+  //     const has05g = AllCharms.some((c) => Number(c?.grams) === 0.5);
+  //     setSelectedWeight(has05g ? "0.5" : "1");
+  //   }
+  // }, [AllCharms]);
 
   useEffect(() => {
     setActiveView(view);
@@ -47,8 +51,12 @@ function PageContent() {
   useEffect(() => {
     const getCharms = async () => {
       try {
-        const data = await FetchCharms();
-        setallCharms(data);
+        // Only fetch if we don't have cached data
+        if (!allCharms || allCharms.length === 0) {
+          const data = await FetchCharms();
+          setallCharms(data);
+          setAllCharms(data); // Cache in store
+        }
       } catch (error) {
         console.error(error);
       }
@@ -57,21 +65,14 @@ function PageContent() {
     getCharms();
   }, []);
   const createCharms = () => {
-    if (!goldSize || !AllCharms?.length) return [];
+    if (!AllCharms?.length) return [];
 
-    // 1️⃣ Filter by gold size (number-safe)
-    const filtered = AllCharms.filter(
-      (charm) => Number(charm?.grams) === Number(goldSize),
-    );
-
-    if (!filtered.length) return [];
-
-    // 2️⃣ Ensure exactly 18 charms
+    // Use ALL charms from database (0.5g and 1g)
     const result = [];
     let i = 0;
 
     while (result.length < 398) {
-      const charm = filtered[i % filtered.length];
+      const charm = AllCharms[i % AllCharms.length];
 
       result.push({
         id: `${charm?.grams}-${result.length}`,
@@ -91,9 +92,10 @@ function PageContent() {
 
   const charms = createCharms();
 
-  const filteredCharms = charms.filter(
-    (item) => item.weight === selectedWeight,
-  );
+  // If no weight selected, show all charms. Otherwise, filter by weight.
+  const filteredCharms = selectedWeight
+    ? charms.filter((item) => item.weight === Number(selectedWeight))
+    : charms;
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -102,8 +104,12 @@ function PageContent() {
       {/* video background */}
       <SuccessModal
         msg={modalmsg}
+        vendingMachineError={vendingError}
         isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
+        onClose={() => {
+          setIsOpen(false);
+          setVendingError(false);
+        }}
       />
       ;{" "}
       {/* main content */}
@@ -247,21 +253,22 @@ function PageContent() {
               <div className="relative">
                 <div className="flex bg-white border border-black rounded-full overflow-hidden">
                   {["0.5", "1"].map((w) => {
-                    const isDisabled = goldSize === Number(w);
-                    const isSelected = selectedWeight === Number(w);
+                    // Check if this weight has available charms
+                    const hasCharms = AllCharms.some((c) => Number(c?.grams) === Number(w));
+                    const isSelected = Number(selectedWeight) === Number(w);
 
                     return (
                       <button
                         key={w}
-                        disabled={!isDisabled}
-                        onClick={() => setSelectedWeight(w)}
+                        disabled={!hasCharms}
+                        onClick={() => setSelectedWeight(isSelected ? null : w)}
                         className={`px-8 py-2 text-[20px] h-20 w-[200px] transition-all duration-300
         ${
-          !isDisabled
-            ? "cursor-not-allowed bg-gray-500 opacity-40 text-black"
-            : !isSelected
+          !hasCharms
+            ? "cursor-not-allowed bg-gray-300 opacity-40 text-gray-500"
+            : isSelected
               ? "bg-black text-white cursor-pointer"
-              : "bg-transparent text-black opacity-70 cursor-pointer"
+              : "bg-white text-black cursor-pointer hover:bg-gray-100"
         }
       `}
                       >
@@ -279,6 +286,7 @@ function PageContent() {
           {activeView === "Experience View" ? (
             <Experience
               setmodalmsg={setmodalmsg}
+              setVendingError={setVendingError}
               spinFlow={false}
               setIsOpen={setIsOpen}
               charms={charms}
@@ -288,25 +296,17 @@ function PageContent() {
           ) : (
             <div className="h-full w-full overflow-auto">
               <div className="w-full h-full grid grid-cols-2 pt-[250px] gap-y-24">
-                {charms.map((data, I) => (
+                {filteredCharms.map((data, I) => (
                   <Link
                     key={I}
-                    href={`/home/charms/charms-code/select-charms/${data?.title}`}
+                    href={`/home/charms/charms-code/select-charms/${data?.title}?weight=${data?.weight}&image=${encodeURIComponent(data?.image || '')}`}
                     style={{
                       paddingBottom:
                         I === filteredCharms.length - 1 ? "200px" : undefined,
                     }}
                     className="flex h-fit justify-center"
                   >
-                    <motion.div
-                      animate={{
-                        // opacity: data.weight === selectedWeight ? 1 : 0.4,
-                        scale: data.weight === selectedWeight ? 1 : 0.95,
-                      }}
-                      transition={{ duration: 0.4 }}
-                    >
-                      <CharmsWithNamePrice data={data} />
-                    </motion.div>
+                    <CharmsWithNamePrice data={data} />
                   </Link>
                 ))}
               </div>

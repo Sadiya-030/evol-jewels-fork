@@ -52,6 +52,7 @@ function makeHoneycomb(itemsCount, ringCount = 8, step = 110) {
 
 const Experience = ({
   setmodalmsg,
+  setVendingError,
   charms = [],
   goldSize,
   setIsOpen,
@@ -162,30 +163,25 @@ const Experience = ({
       );
 
       if (data?.success === false) {
-        setmodalmsg(data?.error);
+        setmodalmsg(data?.error || data?.message || "Vending failed");
+        if (data?.vendingMachineError) {
+          // Vending machine error - keep session alive for retry, don't clear selection
+          setVendingError && setVendingError(true);
+        } else {
+          // Other errors - clear session and selection
+          sessionStorage.removeItem("charmSessionId");
+          setFocusedId("");
+          setCharmsSize(null);
+        }
         setIsOpen(true);
         return;
       }
-      // const espResponse = await fetch("http://EVOLVendingMachine.local/vend", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     command: "VEND",
-      //     slot: 3,
-      //   }),
-      // });
 
-      // if (!espResponse.ok) {
-      //   throw new Error("Service unavailable");
-      // }
-
-      // const espText = await espResponse.text();
-
+      // ✅ Success - clear session and selection
       sessionStorage.removeItem("charmSessionId");
       setFocusedId("");
       setmodalmsg("");
+      setVendingError && setVendingError(false);
       setIsOpen(true);
       setCharmsSize(null);
     } finally {
@@ -228,11 +224,11 @@ const Experience = ({
           />
         ))}
       </motion.div>
-      {focusedId && (
-        <div className="fixed bottom-[570px] left-[680px]  z-50">
+      {focusedId && !isVending && (
+        <div className="fixed bottom-[570px] left-[680px] z-50">
           <div
             onClick={() => setFocusedId("")}
-            className=" h-[80px] w-[80px] grid place-content-center rounded-full bg-gray-600 text-white text-3xl font-semibold shadow-lg"
+            className="h-[80px] w-[80px] grid place-content-center rounded-full bg-gray-600 text-white text-3xl font-semibold shadow-lg cursor-pointer"
           >
             <IoCloseOutline size={45} />
           </div>
@@ -240,13 +236,21 @@ const Experience = ({
       )}
       {focusedId && (
         <div className="fixed bottom-[570px] left-1/2 -translate-x-1/2 z-50">
-          <div
-            onClick={!isVending ? handelSelectCharm : undefined}
-            className={`px-10 py-5 rounded-full text-3xl text-black font-semibold shadow-lg
-    ${isVending ? "bg-gray-400 cursor-not-allowed" : "bg-blue-200"}
-  `}
-          >
-            {isVending ? "Vending..." : "Claim Bean"}
+          <div className="w-[500px] h-[110px] rounded-full overflow-hidden">
+            <div
+              onClick={!isVending ? handelSelectCharm : undefined}
+              className={`rounded-full font-ethereal text-[36px] w-full h-full
+        flex items-center justify-center transition-all duration-200
+        shadow-[0_4px_20px_rgba(29,123,255,0.3)]
+        ${
+          isVending
+            ? "bg-gray-400 text-gray-200 cursor-not-allowed opacity-70"
+            : "bg-[#1d7bfffc] text-white cursor-pointer hover:bg-[#0d6bef] hover:shadow-[0_6px_25px_rgba(29,123,255,0.5)] hover:scale-[1.02]"
+        }
+      `}
+            >
+              {isVending ? "Vending..." : "Claim Bean"}
+            </div>
           </div>
         </div>
       )}

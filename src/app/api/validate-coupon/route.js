@@ -25,7 +25,7 @@ export async function POST(req) {
     return Response.json(
       {
         success: false,
-        message: "Sorry, service unavailable. We are trying to get it back up!",
+        message: "Sorry, Service Unavailable. We are Trying to Get it Back Up!",
       },
       { status: 503 },
     );
@@ -38,7 +38,7 @@ export async function POST(req) {
     return Response.json(
       {
         success: false,
-        message: "Sorry, service unavailable. We are trying to get it back up!",
+        message: "Sorry, Service Unavailable. We are Trying to Get it Back Up!",
       },
       { status: 503 },
     );

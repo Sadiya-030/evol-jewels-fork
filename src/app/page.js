@@ -1,12 +1,6 @@
-import Image from "next/image";
-import Questionnaire from "./components/Questionare";
-import SpinWheel from "./components/SpinWheel";
-import OtpForm from "./components/OtpForm";
 import Link from "next/link";
 import evol from "../../public/evol.svg";
 import img1 from "../../public/img1.png";
-import { div } from "framer-motion/client";
-import ImageSlider from "../components/CardSlider";
 export default function Home() {
   return (
     <main className="min-h-screen w-screen overflow-hidden flex items-center justify-center bg-gray-50">

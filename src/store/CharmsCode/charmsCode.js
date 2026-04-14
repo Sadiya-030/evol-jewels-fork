@@ -5,9 +5,11 @@ export const charmsCode = create()(
   persist(
     (set) => ({
       charmsSize: null,
+      allCharms: [],
 
       setCharmsSize: (data) => set({ charmsSize: data }),
-      clearCharmsCode: () => set({ charmsSize: null }),
+      setAllCharms: (data) => set({ allCharms: data }),
+      clearCharmsCode: () => set({ charmsSize: null, allCharms: [] }),
     }),
     {
       name: "browse-charmsCode-storage",

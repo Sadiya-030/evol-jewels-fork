@@ -10,6 +10,7 @@ const GiftJoyOptionScreen = ({ setPageState }) => {
       <div className="w-full h-screen z-0 absolute top-0 left-0">
         <div className="absolute top-0 left-0 h-screen z-[1] w-full bg-blue-950/80"></div>
       </div>
+
       <div className="relative z-50 min-h-screen">
         {/* Header */}
         <div className="h-[103px] bg-gray-300/20 flex justify-between items-center px-[50px] w-full">
@@ -21,10 +22,13 @@ const GiftJoyOptionScreen = ({ setPageState }) => {
             Home
           </Link>
         </div>
+
+        {/* Intro Section */}
         <div>
           <p className="font-ethereal text-[44px] mb-6 mt-20 text-white text-center">
             I’m Evol, your personal gifting companion
           </p>
+
           <p className="font-hind mb-[80px] text-white backdrop-blur-3xl rounded-[2000px] mx-auto flex items-center justify-center gap-[18px] text-2xl w-fit border min-h-[83px] px-[68px] border-[#FFFFFF54]">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -59,49 +63,49 @@ const GiftJoyOptionScreen = ({ setPageState }) => {
                 </clipPath>
               </defs>
             </svg>
-            <span className=" mt-1.5">
+
+            <span className="mt-1.5">
               Select a journey and we’ll craft the perfect jewellery experience
               for you.
             </span>
           </p>
         </div>
-        <div className="  h-full px-14 flex flex-col gap-16  w-full">
-          <div className="border border-[rgba(230,188,188,0.29)] h-[568px]  w-full backdrop-blur-lg rounded-[45px] bg-[#ffffff1e]  py-[89px] px-10">
-            <div className=" w-fit flex flex-col mx-auto items-center justify-center">
-              <p className=" font-ethereal text-[120px] text-center text-white font-extralight">
+
+        {/* Option Cards */}
+        <div className="px-14 flex flex-col gap-16 w-full pb-20">
+          {/* Smart Guide */}
+          <div
+            onClick={() => setPageState("guided")}
+            className="border border-[rgba(230,188,188,0.29)] h-[568px] w-full backdrop-blur-lg rounded-[45px] bg-[#ffffff1e] px-10 cursor-pointer hover:bg-[#ffffff2e] transition-all hover:shadow-[0_0_30px_4px_rgba(255,255,255,0.4)] flex items-center justify-center"
+          >
+            <div className="flex flex-col items-center justify-center text-center">
+              <p className="font-ethereal text-[120px] text-white font-extralight leading-none">
                 Smart Guide
               </p>
-              <p className=" max-w-[544px] mb-9 mx-auto text-center text-[26px] font-hind text-white">
-                Type your answer or choose from curated suggestions, we’ll guide
-                you to the perfect gift.
+              <p className="max-w-[544px] text-[26px] font-hind text-white mt-4">
+                Choose from curated suggestions, we'll guide you to the perfect
+                gift.
               </p>
-              <button
-                onClick={() => setPageState("guided")}
-                className="bg-white mx-auto h-[84px] w-[379px] text-3xl rounded-full font-ethereal 
-text-[#002066] shadow-[0_0_15px_4px_rgba(255,255,255,0.7)]"
-              >
-                Begin Guided Flow
-              </button>
             </div>
           </div>
-          <div className="border border-[rgba(230,188,188,0.29)] h-[568px] w-full backdrop-blur-lg rounded-[45px] bg-[#ffffff1e]   py-[89px] px-10">
-            <div className=" w-fit flex flex-col mx-auto items-center justify-center">
-              <p className=" font-ethereal text-[120px] text-center text-white font-light">
+
+          {/* Free Choice */}
+          <div
+            onClick={() => setPageState("free")}
+            className="border border-[rgba(230,188,188,0.29)] h-[568px] w-full backdrop-blur-lg rounded-[45px] bg-[#ffffff1e] px-10 cursor-pointer hover:bg-[#ffffff2e] transition-all hover:shadow-[0_0_30px_4px_rgba(255,255,255,0.4)] flex items-center justify-center"
+          >
+            <div className="flex flex-col items-center justify-center text-center">
+              <p className="font-ethereal text-[120px] text-white font-light leading-none">
                 Free Choice
               </p>
-              <p className=" max-w-[544px] mb-9 mx-auto text-center text-[26px] font-hind text-white">
-                No suggestions — just tell us what you want, in your own words.
+              <p className="max-w-[544px] text-[26px] font-hind text-white mt-4">
+                No suggestions - just tell us what you want, in your own words.
               </p>
-              <button
-                onClick={() => setPageState("free")}
-                className="bg-white mx-auto h-[84px] w-[379px] text-3xl rounded-full font-ethereal 
-text-[#002066] shadow-[0_0_15px_4px_rgba(255,255,255,0.7)]"
-              >
-                Type My Own Way
-              </button>
             </div>
           </div>
         </div>
+
+        {/* Bottom Fade */}
         <div className="absolute bottom-0 left-0 w-full h-[400px] pointer-events-none bg-gradient-to-t from-black to-transparent"></div>
       </div>
     </div>

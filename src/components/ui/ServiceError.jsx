@@ -18,14 +18,14 @@ const ServiceError = ({ onRetry, homeLink = "/home" }) => {
 
         {/* Title */}
         <h2 className="text-[42px] font-ethereal text-center text-gray-800 mb-4">
-          Sorry, service unavailable
+          Sorry, Service Unavailable
         </h2>
 
         {/* Subtitle */}
         <p className="text-[24px] text-center text-gray-500 mb-12 max-w-[500px]">
-          We are trying to get it back up!
+          We are Trying to Get it Back Up!
           <br />
-          Please try again later.
+          Please Try Again Later.
         </p>
 
         {/* Buttons */}

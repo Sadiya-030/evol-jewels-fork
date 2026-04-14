@@ -139,7 +139,7 @@ const page = () => {
     }
   };
 
-  // 🟦 "I’m good" button — go to step 2 keeping message
+  // 🟦 "I’m good" button - go to step 2 keeping message
   const handleImGood = () => {
     if (typedValue.trim()) {
       setGreetingMessage(typedValue);

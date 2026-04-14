@@ -38,7 +38,7 @@ const ExitModal = ({ isOpen, onClose }) => {
           <Link
             href={"/home"}
             onClick={() => {
-              oncancel();
+              onClose();
             }}
             className=" flex items-center justify-center w-full rounded-full text-[30px] mx-auto max-w-[522px] h-[100px] bg-[#002066] text-white"
           >

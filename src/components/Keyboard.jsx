@@ -128,15 +128,17 @@ const Keyboard = ({
             </div>
 
             <div className="text-center px-[80px] h-full pb-[78px] pt-7">
-              <button
-                onClick={() => {
-                  handleContinue();
-                  onClose();
-                }}
-                className={`${continueClassName} px-10 py-4 cursor-pointer font-ethereal text-[40px] leading-[72px] h-[103px] w-full rounded-[2000px] bg-white text-[#302B2C] font-semibold`}
-              >
-                Continue
-              </button>
+              {handleContinue && (
+                <button
+                  onClick={() => {
+                    handleContinue();
+                    onClose();
+                  }}
+                  className={`${continueClassName} px-10 py-4 cursor-pointer font-ethereal text-[40px] leading-[72px] h-[103px] w-full rounded-[2000px] bg-white text-[#302B2C] font-semibold`}
+                >
+                  Continue
+                </button>
+              )}
               {version === 2 && (
                 <button
                   onClick={() => {

@@ -14,7 +14,7 @@ import { isValidPhoneNumber } from "libphonenumber-js";
 const STRAPI_URL = process.env.CMSURL;
 const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN;
 const SERVICE_UNAVAILABLE_MESSAGE =
-  "Sorry, service unavailable. We are trying to get it back up!";
+  "Sorry, Service Unavailable. We are Trying to Get it Back Up!";
 
 // Common headers for Strapi API requests
 const getStrapiHeaders = (includeContentType = true) => {
@@ -87,13 +87,15 @@ export async function getUserByPhone(phoneNumber) {
 
     if (!res.ok) {
       console.error(
-        `[UserSpinService] Strapi error: ${res.status} ${res.statusText}`
+        `[UserSpinService] Strapi error: ${res.status} ${res.statusText}`,
       );
 
       // If Strapi returns 404, treat it as user not found
       // This could happen if the collection doesn't exist yet or the endpoint is misconfigured
       if (res.status === 404) {
-        console.log(`[UserSpinService] Collection or user not found (404 from Strapi)`);
+        console.log(
+          `[UserSpinService] Collection or user not found (404 from Strapi)`,
+        );
         return {
           success: false,
           error: "User not found",
@@ -109,7 +111,10 @@ export async function getUserByPhone(phoneNumber) {
     }
 
     const result = await res.json();
-    console.log(`[UserSpinService] Strapi response:`, JSON.stringify(result, null, 2));
+    console.log(
+      `[UserSpinService] Strapi response:`,
+      JSON.stringify(result, null, 2),
+    );
 
     const user = result?.data?.[0];
 
@@ -151,9 +156,7 @@ export async function getUserByPhone(phoneNumber) {
 export async function createUser(name, phoneNumber) {
   const normalized = normalizePhoneNumber(phoneNumber);
 
-  console.log(
-    `[UserSpinService] Creating user: ${name}, phone: ${normalized}`
-  );
+  console.log(`[UserSpinService] Creating user: ${name}, phone: ${normalized}`);
 
   // First check if user already exists
   const existingUser = await getUserByPhone(normalized);
@@ -259,24 +262,21 @@ export async function decrementSpin(phoneNumber) {
   const newSpinCount = Math.max(0, currentSpins - 1);
 
   try {
-    const res = await fetch(
-      `${STRAPI_URL}/api/user-spins/${user.documentId}`,
-      {
-        method: "PUT",
-        headers: getStrapiHeaders(),
-        body: JSON.stringify({
-          data: {
-            spinAvailable: newSpinCount,
-          },
-        }),
-      }
-    );
+    const res = await fetch(`${STRAPI_URL}/api/user-spins/${user.documentId}`, {
+      method: "PUT",
+      headers: getStrapiHeaders(),
+      body: JSON.stringify({
+        data: {
+          spinAvailable: newSpinCount,
+        },
+      }),
+    });
 
     if (!res.ok) {
       const errorText = await res.text();
       console.error(
         `[UserSpinService] Decrement error: ${res.status}`,
-        errorText
+        errorText,
       );
       return {
         success: false,
@@ -298,7 +298,7 @@ export async function decrementSpin(phoneNumber) {
     }
 
     console.log(
-      `[UserSpinService] Spin decremented: ${currentSpins} -> ${newSpinCount}`
+      `[UserSpinService] Spin decremented: ${currentSpins} -> ${newSpinCount}`,
     );
     return {
       success: true,

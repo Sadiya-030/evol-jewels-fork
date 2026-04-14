@@ -62,7 +62,7 @@ export async function POST(req) {
           {
             success: false,
             message:
-              "Sorry, service unavailable. We are trying to get it back up!",
+              "Sorry, Service Unavailable. We are Trying to Get it Back Up!",
           },
           { status: 400 },
         );
@@ -98,6 +98,49 @@ export async function POST(req) {
 
       const slotNo = availableCharm.slotNo;
       const charmId = availableCharm.documentId;
+
+      // Call vending machine FIRST (ESP32 or Simulator)
+      const vendingUrl = process.env.VENDING_URL || "http://localhost:8080";
+      let vendingMachineError = false;
+
+      try {
+        console.log(
+          `[VEND] Calling vending machine at ${vendingUrl}/vend with slot ${slotNo}`,
+        );
+        const vendResponse = await fetch(`${vendingUrl}/vend`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ slot: Number(slotNo), command: "VEND" }),
+        });
+        const vendResult = await vendResponse.json();
+        console.log("[VEND] Vending machine response:", vendResult);
+
+        if (!vendResponse.ok) {
+          console.error("[VEND] Vending machine error:", vendResult);
+          vendingMachineError = true;
+        }
+      } catch (vendError) {
+        console.error(
+          "[VEND] Failed to call vending machine:",
+          vendError.message,
+        );
+        vendingMachineError = true;
+      }
+
+      // If vending machine had issues, return error WITHOUT invalidating coupon
+      if (vendingMachineError) {
+        return NextResponse.json(
+          {
+            success: false,
+            vendingMachineError: true,
+            message: "Contact the Store Staff!",
+            slotNo: slotNo,
+          },
+          { status: 503 },
+        );
+      }
+
+      // ✅ Vending successful - NOW decrement inventory and invalidate coupon
       await fetch(`${process.env.CMSURL}/api/charms/${charmId}`, {
         method: "PUT",
         headers: getStrapiHeaders(),
@@ -129,45 +172,6 @@ export async function POST(req) {
       await updateSession(sessionId, {
         state: "VEND_LOCKED",
       });
-
-      // Call vending machine (ESP32 or Simulator)
-      const vendingUrl = process.env.VENDING_URL || "http://localhost:8080";
-      let vendingMachineError = false;
-
-      try {
-        console.log(
-          `[VEND] Calling vending machine at ${vendingUrl}/vend with slot ${slotNo}`,
-        );
-        const vendResponse = await fetch(`${vendingUrl}/vend`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ slot: Number(slotNo), command: "VEND" }),
-        });
-        const vendResult = await vendResponse.json();
-        console.log("[VEND] Vending machine response:", vendResult);
-
-        if (!vendResponse.ok) {
-          console.error("[VEND] Vending machine error:", vendResult);
-          vendingMachineError = true;
-        }
-      } catch (vendError) {
-        console.error(
-          "[VEND] Failed to call vending machine:",
-          vendError.message,
-        );
-        vendingMachineError = true;
-      }
-
-      // If vending machine had issues, return success but with warning
-      if (vendingMachineError) {
-        return NextResponse.json({
-          success: true,
-          vendingMachineError: true,
-          message:
-            "Your code has been redeemed. If the machine did not dispense your bean, please contact store staff with your code for assistance.",
-          slotNo: slotNo,
-        });
-      }
 
       return NextResponse.json({
         success: true,

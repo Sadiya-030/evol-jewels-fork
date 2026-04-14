@@ -61,11 +61,13 @@ const page = () => {
               <div className=" w-[839px] h-[890px] rounded-[112px]  bg-slate-50 overflow-hidden  border-b-0 border border-[0.2px]  bg-red-600">
                 <div className="  z-50  inset-0 w-full rounded-[112px]  h-full ">
                   <div className=" h-[500px]   bg-slat-50 w-fit mx-auto white  mt-16">
-                    <img
-                      src={stoneData?.gemstone?.image}
-                      alt={stoneData?.gemstone?.name}
-                      className=" h-full   mix-blend-multiply  w-auto object-cover mx-auto "
-                    />
+                    {stoneData?.gemstone?.image && (
+                      <img
+                        src={stoneData.gemstone.image}
+                        alt={stoneData?.gemstone?.name || "Gemstone"}
+                        className=" h-full   mix-blend-multiply  w-auto object-cover mx-auto "
+                      />
+                    )}
                   </div>
                 </div>
               </div>

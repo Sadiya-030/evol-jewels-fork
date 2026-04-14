@@ -30,9 +30,11 @@ const SpinPage = ({ charmsssr, Probability }) => {
   const [result, setResult] = useState(null);
   const [notifimodal, setnotifimodal] = useState(false);
   const [notifymsg, setnotifymsg] = useState("");
+  const [vendingError, setVendingError] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
   const [isPriorityUser, setIsPriorityUser] = useState(false);
   const [wonBean, setWonBean] = useState(null);
+  const [priorityCheckComplete, setPriorityCheckComplete] = useState(false);
 
   // Fallback images for charms
   const fallbackImages = [charms1.src, charms2.src, charms3.src];
@@ -99,44 +101,53 @@ const SpinPage = ({ charmsssr, Probability }) => {
     if (phoneNumber) {
       setIsPhoneFlow(true);
       setUserPhoneNumber(phoneNumber);
-      return;
-    }
 
-    // Check both store and sessionStorage for valid session (legacy coupon flow)
-    const hasSession = sessionStorage.getItem("charmSessionId");
-    const hasCharmsSize = charmsSize !== null && charmsSize !== "";
-
-    if (!hasSession && !hasCharmsSize) {
-      router.push("/home/charms");
-      return;
-    }
-
-    // Check if user is a priority user
-    const checkPriorityUser = async () => {
-      const phoneNumber = sessionStorage.getItem("userPhoneNumber");
-      if (!phoneNumber) return;
-
-      try {
-        const res = await fetch(
-          `/api/spin-config?phoneNumber=${encodeURIComponent(phoneNumber)}`,
-        );
-        if (res.ok) {
-          const data = await res.json();
-          setIsPriorityUser(data.isPriorityUser || false);
+      // Check if user is a priority user (MUST happen before return)
+      const checkPriorityUser = async () => {
+        try {
+          console.log("[SpinPage] Checking priority user for:", phoneNumber);
+          const res = await fetch(
+            `/api/spin-config?phoneNumber=${encodeURIComponent(phoneNumber)}`,
+          );
+          if (res.ok) {
+            const data = await res.json();
+            console.log("[SpinPage] Spin config response:", data);
+            console.log(
+              "[SpinPage] Priority user status:",
+              data.isPriorityUser,
+            );
+            setIsPriorityUser(data.isPriorityUser || false);
+            setPriorityCheckComplete(true);
+          } else {
+            console.error("[SpinPage] Spin config failed:", res.status);
+            setPriorityCheckComplete(true);
+          }
+        } catch (error) {
+          console.error("[SpinPage] Error checking priority user:", error);
+          setPriorityCheckComplete(true);
         }
-      } catch (error) {
-        console.error("Error checking priority user:", error);
-      }
-    };
+      };
+      checkPriorityUser();
+      return;
+    }
 
-    checkPriorityUser();
-  }, [isHydrated, charmsSize, router]);
+    // No phone number - redirect to charms home
+    // Spin page now only supports phone-based flow
+    router.push("/home/charms");
+  }, [isHydrated, router]);
 
   const segmentAngle = 360 / segments.length;
 
   const selectSegmentByProbability = () => {
-    // Priority users always win (but we don't change the probability, just the outcome)
-    const isWinner = isPriorityUser || Math.random() < WIN_PROBABILITY;
+    const randomValue = Math.random();
+    const isWinner = isPriorityUser || randomValue < WIN_PROBABILITY;
+
+    console.log("[SpinPage] Spin selection:", {
+      isPriorityUser,
+      randomValue,
+      WIN_PROBABILITY,
+      isWinner,
+    });
 
     const pool = isWinner ? winSegments : loseSegments;
 
@@ -186,72 +197,86 @@ const SpinPage = ({ charmsssr, Probability }) => {
         return;
       }
 
-      // Show result modal
-      setisSucesssSpin(spinresult?.isWin === true);
-      setsucessModal(true);
-
-      // Clear session data
-      sessionStorage.removeItem("userPhoneNumber");
-      sessionStorage.removeItem("spinUserName");
-      return;
-    }
-
-    // Legacy coupon-based flow
-    const sesId = sessionStorage.getItem("charmSessionId");
-    if (!spinresult) return;
-
-    // Handle loss
-    if (spinresult?.isWin === false) {
-      const data2 = await markSpinCouponAsUsed(sesId);
-      if (data2?.success === false) {
+      // Handle loss
+      if (spinresult?.isWin === false) {
         setisSucesssSpin(false);
         setsucessModal(true);
-        setCharmsSize(null);
+        sessionStorage.removeItem("userPhoneNumber");
+        sessionStorage.removeItem("spinUserName");
         return;
       }
-      sessionStorage.removeItem("charmSessionId");
-      setisSucesssSpin(false);
-      setsucessModal(true);
-      setCharmsSize(null);
-      return;
-    }
 
-    // Handle win - vend max available bean
-    try {
-      const vendRes = await fetch("/api/spin-vend", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId: sesId }),
-      });
+      // Handle win - vend max available 0.5g bean
+      try {
+        const vendRes = await fetch("/api/spin-vend", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ phoneNumber: userPhoneNumber }),
+        });
 
-      const vendData = await vendRes.json();
+        const vendData = await vendRes.json();
 
-      if (vendData?.success === false) {
-        setnotifymsg(vendData?.error || "Failed to vend charm");
+        // Check for vending machine error FIRST (user won but machine didn't dispense)
+        if (vendData?.vendingMachineError) {
+          // Show what they won and ask them to contact staff
+          if (vendData?.wonBean) {
+            setWonBean(vendData.wonBean);
+          }
+          setnotifymsg(
+            vendData?.message || "Contact the Store Staff!",
+          );
+          setVendingError(true);
+          setnotifimodal(true);
+          // Clear session since spin is used and they've been notified
+          sessionStorage.removeItem("userPhoneNumber");
+          sessionStorage.removeItem("spinUserName");
+          return;
+        }
+
+        // Check for other vending failures
+        if (!vendRes.ok || vendData?.success === false) {
+          setnotifymsg(
+            vendData?.message || vendData?.error || "Failed to vend bean",
+          );
+          setnotifimodal(true);
+          // Reset spin state to allow retry
+          setResult(null);
+          setRotation(0);
+          return;
+        }
+
+        // Store won bean info for success modal
+        if (vendData?.wonBean) {
+          setWonBean(vendData.wonBean);
+        }
+
+        // Show success modal
+        setisSucesssSpin(true);
+        setsucessModal(true);
+
+        // Clear session data
+        sessionStorage.removeItem("userPhoneNumber");
+        sessionStorage.removeItem("spinUserName");
+      } catch (error) {
+        console.error("Error vending bean:", error);
+        setnotifymsg("Failed to vend bean. Please try again.");
         setnotifimodal(true);
-        setCharmsSize(null);
-        return;
+        // Reset spin state to allow retry
+        setResult(null);
+        setRotation(0);
       }
-
-      // Store won bean info for success modal
-      if (vendData?.wonBean) {
-        setWonBean(vendData.wonBean);
-      }
-
-      sessionStorage.removeItem("charmSessionId");
-      setisSucesssSpin(true);
-      setsucessModal(true);
-      setCharmsSize(null);
-    } catch (error) {
-      console.error("Error vending charm:", error);
-      setnotifymsg("Failed to vend charm");
-      setnotifimodal(true);
-      setCharmsSize(null);
+      return;
     }
   };
 
   const spinWheel = () => {
     if (isSpinning) return;
+
+    // For phone flow, wait for priority check to complete
+    if (isPhoneFlow && !priorityCheckComplete) {
+      console.log("[SpinPage] Waiting for priority check to complete...");
+      return;
+    }
 
     setIsSpinning(true);
     setResult(null);
@@ -308,8 +333,14 @@ const SpinPage = ({ charmsssr, Probability }) => {
       </div>
       <NotificationModal
         msg={notifymsg}
+        vendingMachineError={vendingError}
+        wonBean={wonBean}
         isOpen={notifimodal}
-        onClose={() => setnotifimodal(false)}
+        onClose={() => {
+          setnotifimodal(false);
+          setVendingError(false);
+          setWonBean(null);
+        }}
       />
       {/* Win/Lose Modal */}
       <SpinSucess
@@ -363,17 +394,25 @@ const SpinPage = ({ charmsssr, Probability }) => {
                 Try Your Luck!
               </p>
               <p className=" text-[26px] leading-[56px] text-[#F4EFEF]">
-                One Week. One Spin. Unlock Your Charm!
+                One Person. One Spin. Unlock Your Charm!
               </p>
             </div>
             <div className=" w-full flex items-start  h-[300px] ">
               <div
                 onClick={spinWheel}
-                // 'disabled' here doesn’t affect div, keeping as-is to not change your logic
-                disabled={isSpinning}
-                className=" bg-white font-ethereal text-[30px] h-[106px] text-center text-black   flex items-center justify-center w-full rounded-full"
+                // 'disabled' here doesn't affect div, keeping as-is to not change your logic
+                disabled={isSpinning || (isPhoneFlow && !priorityCheckComplete)}
+                className={`font-ethereal text-[30px] h-[106px] text-center flex items-center justify-center w-full rounded-full transition-all ${
+                  isPhoneFlow && !priorityCheckComplete
+                    ? "bg-gray-400 text-gray-600 cursor-wait"
+                    : isSpinning
+                      ? "bg-gray-300 text-gray-700 cursor-not-allowed"
+                      : "bg-white text-black cursor-pointer hover:bg-gray-100"
+                }`}
               >
-                Spin Now
+                {isPhoneFlow && !priorityCheckComplete
+                  ? "Loading..."
+                  : "Spin Now"}
               </div>
             </div>
           </div>

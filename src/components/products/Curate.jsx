@@ -32,7 +32,7 @@ const Curate = ({
         Which one feels more you?
       </p>
       <p className="text-[24px] font-ethereal text-[#302B2C] leading-[40px] text-center mb-[45px]">
-        See a few options at once — tap your favorites to refine your shortlist.
+        See a few options at once - tap your favorites to refine your shortlist.
       </p>
 
       {pageItems?.length ? (

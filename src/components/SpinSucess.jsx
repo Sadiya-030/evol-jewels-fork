@@ -50,13 +50,9 @@ const SpinSucess = ({ isOpen, setIsOpen, isSucess, wonBean }) => {
                   )}
                 </div>
                 <p className=" text-black text-center text-[58px] leading-[68px]">
-<<<<<<< HEAD
-                  You Won a Real Gold Bean!{" "}
-=======
                   {wonBean
                     ? `You've got ${wonBean.grams}gms ${wonBean.title} Bean!`
                     : "You Won a Real Gold Charm!"}
->>>>>>> 2b21dab (feat: continue issue #11 vend max bean flow)
                 </p>
                 <p className=" text-[30px] mt-[24px] mb-[55px] text-black leading-[54px]">
                   That's some amazing luck! A tiny token of real gold is now

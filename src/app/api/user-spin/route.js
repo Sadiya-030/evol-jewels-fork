@@ -68,7 +68,7 @@ export async function GET(req) {
     return NextResponse.json(
       {
         success: false,
-        message: "Sorry, service unavailable. We are trying to get it back up!",
+        message: "Sorry, Service Unavailable. We are Trying to Get it Back Up!",
       },
       { status: 500 },
     );
@@ -128,7 +128,7 @@ export async function POST(req) {
     return NextResponse.json(
       {
         success: false,
-        message: "Sorry, service unavailable. We are trying to get it back up!",
+        message: "Sorry, Service Unavailable. We are Trying to Get it Back Up!",
       },
       { status: 500 },
     );

@@ -105,7 +105,7 @@ const page = () => {
               <div class="message">${selectedCard?.msg || ""}</div>
               ${
                 selectedCard?.yourName
-                  ? `<div class="from">— ${selectedCard?.yourName} —</div>`
+                  ? `<div class="from">- ${selectedCard?.yourName} -</div>`
                   : ""
               }
             </div>
@@ -165,7 +165,7 @@ const page = () => {
                   <button
                     onClick={() => {
                       router?.push(
-                        `/browse/${product?.product?.pineconeMetadata?.productHandle}`
+                        `/browse/${product?.product?.pineconeMetadata?.productHandle}`,
                       );
                     }}
                     className="  rounded-full border-black border w-full h-[78px] text-[26px] text-[#002066]"
@@ -202,7 +202,7 @@ const page = () => {
                       theirName: "",
                     });
                     router.push(
-                      `/${last2}/${secondLast2}/choose-greeting-templates`
+                      `/${last2}/${secondLast2}/choose-greeting-templates`,
                     );
                   }}
                   className=" text-[26px] flex justify-center mt-20 items-center gap-3 text-[#002066]"

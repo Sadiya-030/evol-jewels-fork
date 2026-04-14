@@ -1,6 +1,6 @@
 import redis from "./redis";
 
-const SESSION_TTL = 180; // 3 minutes (seconds)
+const SESSION_TTL = 600; // 10 minutes (seconds)
 
 export async function saveSession(session) {
   const key = `vend:session:${session.sessionId}`;
