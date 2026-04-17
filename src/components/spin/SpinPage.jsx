@@ -222,9 +222,7 @@ const SpinPage = ({ charmsssr, Probability }) => {
           if (vendData?.wonBean) {
             setWonBean(vendData.wonBean);
           }
-          setnotifymsg(
-            vendData?.message || "Contact the Store Staff!",
-          );
+          setnotifymsg(vendData?.message || "Contact the Store Staff!");
           setVendingError(true);
           setnotifimodal(true);
           // Clear session since spin is used and they've been notified
@@ -322,7 +320,8 @@ const SpinPage = ({ charmsssr, Probability }) => {
   }, [charms.length]);
 
   const [sucessModal, setsucessModal] = useState(false);
-  const WIN_PROBABILITY = Number(Probability) || 0.05; // 1 in 100
+  const WIN_PROBABILITY =
+    Probability !== undefined && Probability !== null ? Number(Probability) : 0; // 1 in 100
   const winSegments = segments.filter((seg) => seg.isWin);
   const loseSegments = segments.filter((seg) => !seg.isWin);
 
