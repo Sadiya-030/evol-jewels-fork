@@ -140,7 +140,7 @@ const SpinPage = ({ charmsssr, Probability }) => {
 
   const selectSegmentByProbability = () => {
     const randomValue = Math.random();
-    const isWinner = isPriorityUser || randomValue < WIN_PROBABILITY;
+    const isWinner = isPriorityUser && randomValue < WIN_PROBABILITY;
 
     console.log("[SpinPage] Spin selection:", {
       isPriorityUser,
