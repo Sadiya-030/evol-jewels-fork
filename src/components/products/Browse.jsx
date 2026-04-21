@@ -1,7 +1,9 @@
 import React from "react";
 import ProductCard from "./ProductCard";
+import { useHorizontalScrollForChildren } from "../../hooks/useHorizontalScroll";
 
 const Browse = ({ data, isLoading, version, engagement = false }) => {
+  const browseRef = useHorizontalScrollForChildren();
   const grouped = data.reduce((acc, item) => {
     const type =
       item.pineconeMetadata?.productType?.trim().toLowerCase() || "unknown";
@@ -17,7 +19,7 @@ const Browse = ({ data, isLoading, version, engagement = false }) => {
   const isSingleGroup = groupKeys.length === 1;
 
   return (
-    <div className=" h-[1620px] overflow-y-scroll  ">
+    <div ref={browseRef} className=" h-[1620px] overflow-y-scroll  ">
       <p className="mx-[100px] mt-[46px] mb-[33px] rounded-[2000px] text-[22px] font-medium text-[#7C50E3] w-[calc(100vw-200px)] flex items-center justify-center gap-6 h-[66px] border border-[#7C50E336] bg-[#7C50E30A]">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -65,7 +67,7 @@ const Browse = ({ data, isLoading, version, engagement = false }) => {
       {isLoading ? (
         <div>
           <p className=" mx-[100px] mt-[75px] rounded-lg animate-pulse bg-gray-200 h-10 w-[180px] capitalize font-ethereal mb-[30px]  text-[#302B2C] text-[38px]"></p>
-          <div className="flex gap-8 overflow-x-scroll no-scrollbar">
+          <div className="flex gap-8 overflow-x-scroll no-scrollbar cursor-grab touch-pan-x" style={{ WebkitOverflowScrolling: "touch", scrollBehavior: "smooth" }}>
             {[...Array(4)].map((_, i) => (
               <div
                 key={i}
@@ -83,7 +85,7 @@ const Browse = ({ data, isLoading, version, engagement = false }) => {
             ))}
           </div>
           <p className=" mx-[100px] mt-[75px] rounded-lg animate-pulse bg-gray-200 h-10 w-[220px] capitalize font-ethereal mb-[30px]  text-[#302B2C] text-[38px]"></p>
-          <div className="flex gap-8 overflow-x-scroll no-scrollbar">
+          <div className="flex gap-8 overflow-x-scroll no-scrollbar cursor-grab touch-pan-x" style={{ WebkitOverflowScrolling: "touch", scrollBehavior: "smooth" }}>
             {[...Array(4)].map((_, i) => (
               <div
                 key={i}
@@ -107,7 +109,7 @@ const Browse = ({ data, isLoading, version, engagement = false }) => {
             {groupKeys[0]}
           </p>
 
-          <div className="flex flex-wrap pl-[100px] items-center  max-h-[1150px] no-scrollbar gap-8 overflow-x-scroll">
+          <div className="flex flex-wrap pl-[100px] items-center  max-h-[1150px] no-scrollbar gap-8 overflow-x-scroll cursor-grab touch-pan-x" style={{ WebkitOverflowScrolling: "touch", scrollBehavior: "smooth" }}>
             {filteredGrouped[groupKeys[0]]?.map((item, i) => (
               <div key={i} className="   min-h-[580px]">
                 <ProductCard version={version} data={item} />
@@ -123,7 +125,7 @@ const Browse = ({ data, isLoading, version, engagement = false }) => {
                 {type}
               </p>
 
-              <div className="flex no-scrollbar gap-8 overflow-x-scroll">
+              <div className="flex no-scrollbar gap-8 overflow-x-scroll cursor-grab touch-pan-x" style={{ WebkitOverflowScrolling: "touch", scrollBehavior: "smooth" }}>
                 {filteredGrouped[type]?.map((item, i) => (
                   <div
                     key={i}

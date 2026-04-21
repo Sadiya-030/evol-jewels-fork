@@ -17,8 +17,10 @@ import ExitModal from "../ui/ExitModal";
 import star from "../../../public/star.svg";
 import QueModal from "../ui/QueModal";
 import { browseStore } from "../../store/browseProduct";
+import { useHorizontalScroll } from "../../hooks/useHorizontalScroll";
 const GiftJoyScreen = ({ setPageState }) => {
   const router = useRouter();
+  const optionsScrollRef = useHorizontalScroll();
   // --- Gender slider state ---
   const [gender, setgender] = useState("");
   const [genderSlider, setgenderSlider] = useState(false); // start closed
@@ -602,7 +604,14 @@ const GiftJoyScreen = ({ setPageState }) => {
             <p className="text-center text-[28px] text-white leading-[41px] mb-8 mt-6">
               Smart Picks for You
             </p>
-            <div className="mt-[32px] mb-[100px] no-scrollbar gap-[60px] flex py-6 flex-row overflow-x-scroll px-[77px]">
+            <div
+              ref={optionsScrollRef}
+              className="mt-[32px] mb-[100px] no-scrollbar gap-[60px] flex py-6 flex-row overflow-x-scroll px-[77px] cursor-grab touch-pan-x"
+              style={{
+                WebkitOverflowScrolling: "touch",
+                scrollBehavior: "smooth",
+              }}
+            >
               {options.map((option, i) => (
                 <div
                   key={i}
